@@ -1,8 +1,19 @@
 import React from "react";
+import WhatsAppButton from "../Shared/WhatsAppButton";
 
 const InfoProductoCard = ({ name, summary, image, collaborator, info_date }) => {
     // Formatear fecha
     const fecha = info_date ? new Date(info_date).toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" }) : "";
+    
+    // Crear mensaje personalizado para WhatsApp
+    const whatsappMessage = `Hola, me interesa obtener más información sobre el infoproducto "${name}".
+
+📄 *Resumen:* ${summary}
+👨‍💼 *Colaborador:* ${collaborator}
+📅 *Fecha:* ${fecha}
+
+¿Podrían brindarme más detalles al respecto?`;
+
     return (
         <div className=" rounded-lg overflow-hidden flex flex-col h-full text-paragraph">
             <img
@@ -27,9 +38,14 @@ const InfoProductoCard = ({ name, summary, image, collaborator, info_date }) => 
                         <span className="block text-neutral">{fecha}</span>
                     </div>
                 </div>
-                <button className="mt-6 w-full bg-constrast text-white font-semibold py-3 rounded-xl transition-colors">
+                <WhatsAppButton 
+                    variant="constrast"
+                    className="mt-6 w-full bg-constrast text-white font-semibold py-3 rounded-xl transition-colors hover:bg-red-600"
+                    customMessage={whatsappMessage}
+                    showIcon={false}
+                >
                     Más información
-                </button>
+                </WhatsAppButton>
             </div>
         </div>
     );
