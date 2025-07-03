@@ -174,11 +174,11 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/langs', [AdminLangController::class, 'reactView'])->name('Admin/Langs.jsx');
     Route::get('/appointments', [AdminAppointmentController::class, 'reactView'])->name('Admin/Appointments.jsx');
 
-Route::get('/success_stories'   , [AdminSuccessStoryController::class, 'reactView'])->name('Admin/SuccessStories.jsx');
+    Route::get('/success_stories', [AdminSuccessStoryController::class, 'reactView'])->name('Admin/SuccessStories.jsx');
 
     Route::get('/sales', [AdminSaleController::class, 'reactView'])->name('Admin/Sales.jsx');
     Route::get('/posts', [AdminPostController::class, 'reactView'])->name('Admin/Posts.jsx');
- Route::get('/infoproducts', [AdminInfoproductController::class, 'reactView'])->name('Admin/Infoproducts.jsx');
+    Route::get('/infoproducts', [AdminInfoproductController::class, 'reactView'])->name('Admin/Infoproducts.jsx');
     Route::get('/items', [AdminItemController::class, 'reactView'])->name('Admin/Items.jsx');
     Route::get('/colors', [AdminItemColorController::class, 'reactView'])->name('Admin/Colors.jsx');
     Route::get('/instagram_posts', [AdminInstagramPostsController::class, 'reactView'])->name('Admin/InstagramPosts.jsx');
