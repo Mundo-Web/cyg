@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
-class InfoproductController extends BasicController
+class InfoProductController extends BasicController
 {
     public $model = Infoproduct::class;
     public $reactView = 'Admin/Infoproducts';
