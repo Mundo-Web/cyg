@@ -8,7 +8,7 @@ use App\Models\Category;
 use App\Models\InfoproductCategory;
 use Illuminate\Http\Request;
 
-class InfoProductCategoryController extends BasicController
+class InfoproductCategoryController extends BasicController
 {
     public $model = InfoproductCategory::class;
     public $reactView = 'Admin/InfoproductCategories';
