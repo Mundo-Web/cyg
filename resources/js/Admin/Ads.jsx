@@ -173,6 +173,9 @@ const Ads = () => {
                             const sectionNames = {
                                 'home_services_mobile': 'Servicios - Móvil',
                                 'home_services_desktop': 'Servicios - Escritorio',
+                                'service_faq_sidebar': 'FAQ Servicios - Lateral',
+                                'case_study_sidebar_desktop': 'Caso de Éxito - Sidebar Desktop',
+                                'case_study_content_mobile': 'Caso de Éxito - Contenido Móvil',
                                 'contact_banner': 'Banner de Contacto',
                                 'footer_promotion': 'Promoción Footer',
                                 'header_announcement': 'Anuncio Header',
@@ -287,6 +290,9 @@ const Ads = () => {
                         <option value="">Selecciona una sección</option>
                         <option value="home_services_mobile">Servicios - Móvil</option>
                         <option value="home_services_desktop">Servicios - Escritorio</option>
+                        <option value="service_faq_sidebar">FAQ Servicios - Lateral</option>
+                        <option value="case_study_sidebar_desktop">Caso de Éxito - Sidebar Desktop</option>
+                        <option value="case_study_content_mobile">Caso de Éxito - Contenido Móvil</option>
                         <option value="contact_banner">Banner de Contacto</option>
                         <option value="footer_promotion">Promoción Footer</option>
                         <option value="header_announcement">Anuncio Header</option>

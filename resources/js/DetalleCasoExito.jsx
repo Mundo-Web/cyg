@@ -10,6 +10,7 @@ import { ArrowRight } from "lucide-react";
 import ServiceSeccionFaq from "./components/Tailwind/CambioGerencia/ServiceSeccionFaq";
 import TextWithHighlight from "./Utils/TextWithHighlight";
 import WhatsAppButton, { WhatsAppButtonWithArrow } from "./components/Shared/WhatsAppButton";
+import DynamicAd from "./components/Shared/DynamicAd";
 const DetalleCasoExito = ({
   successStory,
   successStoryRecents = [],
@@ -195,36 +196,37 @@ const DetalleCasoExito = ({
               </div>
             </div>
 
-            <div
-              className={`relative w-full aspect-[9/10] h-[350px] font-paragraph rounded-lg shadow-xl overflow-hidden flex flex-col  transition-all duration-300 z-10`}
-            >
-              {/* Overlay gradiente negro a transparente de abajo hacia arriba */}
-              <div
-                className="absolute inset-0 transition-opacity duration-300 pointer-events-none "
-                style={{
-                  background: "linear-gradient(to top, rgba(0,0,0), #ffffff)"
-                }}
-              />              <img
-                src={"/assets/cambiogerencia/card-contact.webp"}
-                alt={"Servicios de RR.HH"}
-                className="w-full h-full object-cover z-10 relative group-hover:opacity-0 transition-opacity duration-300"
-                onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400/cccccc/808080?text=Imagen+no+disponible"; }}
-              />
-              <div className="p-6 flex flex-col flex-grow z-20  absolute bottom-0 text-white">
-                <h3 className={`text-xl font-medium mb-2 `}>Servicios de RR.HH</h3>
-                <p className={`text-xs mb-4 flex-grow  text-white`}>Herramientas ágiles para la gestión del talent, enean commodo ligula eget dolor. </p>
-                <WhatsAppButton
-                  variant="constrast"
-
-                  className="w-full bg-constrast hover:bg-primary transition-colors duration-300s"
-                >
-                  Reserva una consulta
-                </WhatsAppButton>
-
-
-
-              </div>
-            </div>
+            <DynamicAd 
+              correlative="case_study_sidebar_desktop"
+              showWhatsAppButton={true}
+              fallback={
+                <div className={`relative w-full aspect-[9/10] h-[350px] font-paragraph rounded-lg shadow-xl overflow-hidden flex flex-col  transition-all duration-300 z-10`}>
+                  {/* Overlay gradiente negro a transparente de abajo hacia arriba */}
+                  <div
+                    className="absolute inset-0 transition-opacity duration-300 pointer-events-none "
+                    style={{
+                      background: "linear-gradient(to top, rgba(0,0,0), #ffffff)"
+                    }}
+                  />
+                  <img
+                    src={"/assets/cambiogerencia/card-contact.webp"}
+                    alt={"Servicios de RR.HH"}
+                    className="w-full h-full object-cover z-10 relative group-hover:opacity-0 transition-opacity duration-300"
+                    onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400/cccccc/808080?text=Imagen+no+disponible"; }}
+                  />
+                  <div className="p-6 flex flex-col flex-grow z-20  absolute bottom-0 text-white">
+                    <h3 className={`text-xl font-medium mb-2 `}>Servicios de RR.HH</h3>
+                    <p className={`text-xs mb-4 flex-grow  text-white`}>Herramientas ágiles para la gestión del talent, enean commodo ligula eget dolor. </p>
+                    <WhatsAppButton
+                      variant="constrast"
+                      className="w-full bg-constrast hover:bg-primary transition-colors duration-300s"
+                    >
+                      Reserva una consulta
+                    </WhatsAppButton>
+                  </div>
+                </div>
+              }
+            />
           </div>
 
 
@@ -432,33 +434,39 @@ const DetalleCasoExito = ({
                   className="rounded-xl h-full w-full  object-cover shadow-md"
                 />
               </div>
-              <div
-                className={` lg:hidden relative w-full  font-paragraph rounded-lg shadow-xl overflow-hidden flex flex-col  transition-all duration-300 z-10`}
-              >
-                {/* Overlay gradiente negro a transparente de abajo hacia arriba */}
-                <div
-                  className="absolute inset-0 transition-opacity duration-300 pointer-events-none "
-                  style={{
-                    background: "linear-gradient(to top, rgba(0,0,0), #ffffff)"
-                  }}
-                />                <img
-                  src={"/assets/cambiogerencia/card-contact.webp"}
-                  alt={"Servicios de RR.HH"}
-                  className="w-full h-[350px] object-cover z-10 relative group-hover:opacity-0 transition-opacity duration-300"
-                  onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400/cccccc/808080?text=Imagen+no+disponible"; }}
-                />
-                <div className="p-6 flex flex-col flex-grow z-20  absolute bottom-0 text-white">
-                  <h3 className={`text-xl font-medium mb-2 `}>Servicios de RR.HH</h3>
-                  <p className={`text-xs mb-4 flex-grow  text-white`}>Herramientas ágiles para la gestión del talent, enean commodo ligula eget dolor. </p>
-                  <WhatsAppButton
-                    variant="constrast"
-
-                    className="w-full bg-constrast hover:bg-primary transition-colors duration-300s"
-                  >
-                    Reserva una consulta
-                  </WhatsAppButton>
-                </div>
-              </div>
+              <DynamicAd 
+              className="lg:hidden relative w-full  font-paragraph rounded-lg shadow-xl overflow-hidden flex flex-col  transition-all duration-300 z-10"
+               showWhatsAppButton={true}
+              
+              correlative="case_study_content_mobile"
+                fallback={
+                  <div className={` lg:hidden relative w-full  font-paragraph rounded-lg shadow-xl overflow-hidden flex flex-col  transition-all duration-300 z-10`}>
+                    {/* Overlay gradiente negro a transparente de abajo hacia arriba */}
+                    <div
+                      className="absolute inset-0 transition-opacity duration-300 pointer-events-none "
+                      style={{
+                        background: "linear-gradient(to top, rgba(0,0,0), #ffffff)"
+                      }}
+                    />
+                    <img
+                      src={"/assets/cambiogerencia/card-contact.webp"}
+                      alt={"Servicios de RR.HH"}
+                      className="w-full h-[350px] object-cover z-10 relative group-hover:opacity-0 transition-opacity duration-300"
+                      onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400/cccccc/808080?text=Imagen+no+disponible"; }}
+                    />
+                    <div className="p-6 flex flex-col flex-grow z-20  absolute bottom-0 text-white">
+                      <h3 className={`text-xl font-medium mb-2 `}>Servicios de RR.HH</h3>
+                      <p className={`text-xs mb-4 flex-grow  text-white`}>Herramientas ágiles para la gestión del talent, enean commodo ligula eget dolor. </p>
+                      <WhatsAppButton
+                        variant="constrast"
+                        className="w-full bg-constrast hover:bg-primary transition-colors duration-300s"
+                      >
+                        Reserva una consulta
+                      </WhatsAppButton>
+                    </div>
+                  </div>
+                }
+              />
             </section>
             <section>
 
