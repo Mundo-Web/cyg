@@ -36,10 +36,17 @@ const Ads = () => {
         idRef.current.value = data?.id ?? "";
         nameRef.current.value = data?.name ?? "";
         descriptionRef.current.value = data?.description ?? "";
-        correlativeRef.current.value = data?.correlative ?? "";
         whatsappMessageRef.current.value = data?.whatsapp_message ?? "";
         imageRef.image.src = `/api/ads/media/${data?.image}`;
         imageRef.current.value = null;
+        
+        // Actualizar el select después de un pequeño delay para asegurar que el modal esté completamente renderizado
+        setTimeout(() => {
+            correlativeRef.current.value = data?.correlative ?? "";
+            // Trigger el evento change para que el componente SelectFormGroup se actualice
+            $(correlativeRef.current).trigger('change');
+        }, 100);
+        
         $(modalRef.current).modal("show");
     };
 
@@ -126,7 +133,7 @@ const Ads = () => {
                                     .refresh(),
                         },
                     });
-                    container.unshift({
+                   /* container.unshift({
                         widget: "dxButton",
                         location: "after",
                         options: {
@@ -135,7 +142,7 @@ const Ads = () => {
                             hint: "Nuevo anuncio",
                             onClick: () => onModalOpen(),
                         },
-                    });
+                    });*/
                 }}
                 columns={[
                     {
@@ -248,14 +255,14 @@ const Ads = () => {
                                     onClick: () => onModalOpen(data),
                                 })
                             );
-                            container.append(
+                          /*  container.append(
                                 DxButton({
                                     className: "btn btn-xs btn-soft-danger",
                                     title: "Eliminar",
                                     icon: "fa fa-trash",
                                     onClick: () => onDeleteClicked(data.id),
                                 })
-                            );
+                            );*/
                         },
                         allowFiltering: false,
                         allowExporting: false,
@@ -293,10 +300,7 @@ const Ads = () => {
                         <option value="service_faq_sidebar">FAQ Servicios - Lateral</option>
                         <option value="case_study_sidebar_desktop">Caso de Éxito - Sidebar Desktop</option>
                         <option value="case_study_content_mobile">Caso de Éxito - Contenido Móvil</option>
-                        <option value="contact_banner">Banner de Contacto</option>
-                        <option value="footer_promotion">Promoción Footer</option>
-                        <option value="header_announcement">Anuncio Header</option>
-                        <option value="sidebar_ad">Anuncio Lateral</option>
+                 
                     </SelectFormGroup>
                     
                     <InputFormGroup
