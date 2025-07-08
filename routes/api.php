@@ -157,6 +157,7 @@ Route::get('/supplies/media/{uuid}', [SupplyController::class, 'media']);
 Route::get('/instagram_post/media/{uuid}', [InstagramPostsController::class, 'media']);
 Route::get('/fragrances/media/{uuid}', [FragranceController::class, 'media']);
 Route::get('/ads/media/{uuid}', [AdController::class, 'media']);
+Route::get('/ads/by-correlative/{correlative}', [AdController::class, 'getByCorrelative']);
 Route::get('/strength/media/{uuid}', [StrengthController::class, 'media']);
 Route::get('/core_value/media/{uuid}', [CoreValueController::class, 'media']);
 Route::get('/instagram_post/media/{uuid}', [InstagramPostsController::class, 'media']);

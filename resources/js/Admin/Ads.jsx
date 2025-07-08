@@ -17,7 +17,7 @@ import SelectFormGroup from "../Components/Adminto/form/SelectFormGroup";
 
 const adsRest = new AdsRest();
 
-const Ads = ({ items }) => {
+const Ads = () => {
     const gridRef = useRef();
     const modalRef = useRef();
 
@@ -26,16 +26,9 @@ const Ads = ({ items }) => {
     const nameRef = useRef();
     const descriptionRef = useRef();
     const imageRef = useRef();
-    const dateBeginRef = useRef();
-    const dateEndRef = useRef();
-    const secondsRef = useRef();
-    const linkRef = useRef();
-    const invasivoRef = useRef();
-    const actionsRef = useRef();
-    const itemRef = useRef();
+    const correlativeRef = useRef();
+    const whatsappMessageRef = useRef();
     const [isEditing, setIsEditing] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(null);
-    const [selectedAction, setSelectedAction] = useState(false);
     const onModalOpen = (data) => {
         if (data?.id) setIsEditing(true);
         else setIsEditing(false);
@@ -43,48 +36,26 @@ const Ads = ({ items }) => {
         idRef.current.value = data?.id ?? "";
         nameRef.current.value = data?.name ?? "";
         descriptionRef.current.value = data?.description ?? "";
+        correlativeRef.current.value = data?.correlative ?? "";
+        whatsappMessageRef.current.value = data?.whatsapp_message ?? "";
         imageRef.image.src = `/api/ads/media/${data?.image}`;
         imageRef.current.value = null;
-        dateBeginRef.current.value = data?.date_begin ?? "";
-        dateEndRef.current.value = data?.date_end ?? "";
-        secondsRef.current.value = data?.seconds ?? 0;
-        itemRef.current.value = data?.item_id ?? null;
-        linkRef.current.value = data?.link ?? "";
-        if (data?.actions) {
-            $(actionsRef.current).prop("checked", false).trigger("click");
-        } else {
-            $(actionsRef.current).prop("checked", true).trigger("click");
-        }
-        if (data?.invasivo) {
-            $(invasivoRef.current).prop("checked", false).trigger("click");
-        } else {
-            $(invasivoRef.current).prop("checked", true).trigger("click");
-        }
         $(modalRef.current).modal("show");
     };
 
     const onModalSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (selectedAction) {
-                secondsRef.current.value = null;
-            }
-
             const request = {
                 id: idRef.current.value || undefined,
                 name: nameRef.current.value,
                 description: descriptionRef.current.value,
-                date_begin: dateBeginRef.current.value,
-                date_end: dateEndRef.current.value,
-                seconds: secondsRef.current.value || 0,
-                actions: actionsRef.current.checked ? 1 : 0,
-                item_id: itemRef.current.value || null,
-                link: linkRef.current.value,
-                invasivo: actionsRef.current.checked
-                    ? 0
-                    : invasivoRef.current.checked
-                    ? 1
-                    : 0,
+                correlative: correlativeRef.current.value,
+                whatsapp_message: whatsappMessageRef.current.value,
+                visible: 1, // Por defecto visible
+                invasivo: 0, // Por defecto no invasivo
+                actions: 0, // Por defecto no requiere acción
+                seconds: 0, // Por defecto sin delay
             };
 
             const formData = new FormData();
@@ -175,7 +146,7 @@ const Ads = ({ items }) => {
                     {
                         dataField: "image",
                         caption: "Imagen",
-                        width: "60px",
+                        width: "80px",
                         allowFiltering: false,
                         cellTemplate: (container, { data }) => {
                             ReactAppend(
@@ -183,118 +154,62 @@ const Ads = ({ items }) => {
                                 <img
                                     src={`/api/ads/media/${data.image}`}
                                     style={{
-                                        width: "50px",
-                                        aspectRatio: 1,
+                                        width: "70px",
+                                        aspectRatio: 16/9,
                                         objectFit: "contain",
                                         objectPosition: "center",
                                         borderRadius: "4px",
+                                        border: "1px solid #e3ebf0"
                                     }}
                                 />
                             );
                         },
                     },
                     {
+                        dataField: "correlative",
+                        caption: "Sección",
+                        width: "200px",
+                        cellTemplate: (container, { data }) => {
+                            const sectionNames = {
+                                'home_services_mobile': 'Servicios - Móvil',
+                                'home_services_desktop': 'Servicios - Escritorio',
+                                'contact_banner': 'Banner de Contacto',
+                                'footer_promotion': 'Promoción Footer',
+                                'header_announcement': 'Anuncio Header',
+                                'sidebar_ad': 'Anuncio Lateral'
+                            };
+                            const sectionName = sectionNames[data.correlative] || data.correlative || 'Sin sección';
+                            container.html(
+                                `<span class="badge bg-info">${sectionName}</span>`
+                            );
+                        },
+                    },
+                    {
                         dataField: "name",
                         caption: "Contenido",
-                        width: "50%",
                         cellTemplate: (container, { data }) => {
                             ReactAppend(
                                 container,
-                                data.name || data.description ? (
-                                    <p
-                                        className="mb-0"
-                                        style={{ width: "100%" }}
-                                    >
-                                        <b className="d-block">{data.name}</b>
-                                        <small
-                                            className="text-wrap text-muted"
-                                            style={{
-                                                overflow: "hidden",
-                                                display: "-webkit-box",
-                                                WebkitBoxOrient: "vertical",
-                                                WebkitLineClamp: 2,
-                                            }}
-                                        >
+                                <div>
+                                    <p className="mb-1 fw-bold">{data.name || 'Sin título'}</p>
+                                    {data.description && (
+                                        <small className="text-muted d-block" style={{
+                                            overflow: "hidden",
+                                            display: "-webkit-box",
+                                            WebkitBoxOrient: "vertical",
+                                            WebkitLineClamp: 2,
+                                        }}>
                                             {data.description}
                                         </small>
-                                    </p>
-                                ) : (
-                                    <i className="text-muted">
-                                        - Sin contenido textual -
-                                    </i>
-                                )
+                                    )}
+                                    {data.whatsapp_message && (
+                                        <small className="text-success">
+                                            <i className="fab fa-whatsapp me-1"></i>
+                                            Mensaje personalizado
+                                        </small>
+                                    )}
+                                </div>
                             );
-                        },
-                    },
-                    {
-                        dataField: "date_begin",
-                        caption: "Mostrar",
-                        cellTemplate: (container, { data }) => {
-                            container.html(
-                                renderToString(
-                                    <>
-                                        {data.date_begin && data.date_end ? (
-                                            <>
-                                                <p className="mb-0">
-                                                    <b>Desde:</b>{" "}
-                                                    {moment(
-                                                        data.date_begin
-                                                    ).format("DD [de] MMMM")}
-                                                </p>
-                                                <p className="mb-0">
-                                                    <b>Hasta:</b>{" "}
-                                                    {moment(
-                                                        data.date_end
-                                                    ).format("DD [de] MMMM")}
-                                                </p>
-                                            </>
-                                        ) : (
-                                            <p className="mb-0">
-                                                <b>Visible:</b> Siempre
-                                            </p>
-                                        )}
-                                        <p className="mb-0">
-                                            <b>Se muestra:</b>{" "}
-                                            {console.log(data)}
-                                            {data.seconds > 0 &&
-                                            data.actions === 0 ? (
-                                                <>Después de {data.seconds}s</>
-                                            ) : data.actions === 1 ? (
-                                                <>Al agregar carrito</>
-                                            ) : (
-                                                <>Al cargar la página</>
-                                            )}
-                                        </p>
-                                        <p className="mb-0">
-                                            <b>Invasivo:</b>{" "}
-                                            {data.invasivo && data.actions === 0
-                                                ? "Si"
-                                                : "No"}
-                                        </p>
-                                    </>
-                                )
-                            );
-                        },
-                    },
-                    {
-                        dataField: "link",
-                        caption: "Link",
-                        cellTemplate: (container, { data }) => {
-                            if (data.link) {
-                                container.html(
-                                    renderToString(
-                                        <a href={data.link}>{data.link}</a>
-                                    )
-                                );
-                            } else {
-                                container.html(
-                                    renderToString(
-                                        <i className="text-muted">
-                                            - Sin link -
-                                        </i>
-                                    )
-                                );
-                            }
                         },
                     },
                     {
@@ -319,11 +234,12 @@ const Ads = ({ items }) => {
                     },
                     {
                         caption: "Acciones",
+                        width: "120px",
                         cellTemplate: (container, { data }) => {
                             container.css("text-overflow", "unset");
                             container.append(
                                 DxButton({
-                                    className: "btn btn-xs btn-soft-primary",
+                                    className: "btn btn-xs btn-soft-primary me-1",
                                     title: "Editar",
                                     icon: "fa fa-pen",
                                     onClick: () => onModalOpen(data),
@@ -351,79 +267,55 @@ const Ads = ({ items }) => {
             >
                 <div className="row" id="principal-container">
                     <input ref={idRef} type="hidden" />
+                    
                     <ImageFormGroup
                         eRef={imageRef}
                         label="Imagen"
-                        col="col-md-4"
-                        aspect={1}
+                        col="col-md-12"
+                        aspect={16/9}
                         fit="contain"
                         required
                     />
-                    <div className="col-md-8">
-                        <SwitchFormGroup
-                            eRef={invasivoRef}
-                            label="¿El anuncio es invasivo?"
-                            specification="Solo se mostrará este anuncio y no los demás"
-                        />
-                        <TextareaFormGroup
-                            eRef={nameRef}
-                            label="Título"
-                            rows={1}
-                        />
-                        <TextareaFormGroup
-                            eRef={descriptionRef}
-                            label="Descripción"
-                            rows={2}
-                        />
-                    </div>
-                    <label>Mostrar</label>
-                    <InputFormGroup
-                        eRef={dateBeginRef}
-                        label="Desde"
-                        type="date"
-                        col="col-md-6"
-                    />
-                    <InputFormGroup
-                        eRef={dateEndRef}
-                        label="Hasta"
-                        type="date"
-                        col="col-md-6"
-                    />
-
-                    <div className="col-md-12">
-                        <SwitchFormGroup
-                            eRef={actionsRef}
-                            onChange={(e) =>
-                                setSelectedAction(e.target.checked)
-                            }
-                            label="¿Mostrar después de que el productos sea añadido
-                                al carrito?"
-                            specification="Solo se mostrará este anuncio cuando el producto ha seleccionar sea añadido al carrito de compras"
-                        />
-                    </div>
-
+                    
                     <SelectFormGroup
-                        eRef={itemRef}
-                        label="Producto"
-                        dropdownParent="#principal-container"
-                        onChange={(e) => setSelectedItem(e.target.value)}
-                        disabled={!selectedAction}
+                        eRef={correlativeRef}
+                        label="Sección del sitio"
+                        col="col-md-12"
+                        dropdownParent={'#principal-container'}
+                        required
                     >
-                        {items.map((item, index) => (
-                            <option key={index} value={item.id}>
-                                {item.name}
-                            </option>
-                        ))}
+                        <option value="">Selecciona una sección</option>
+                        <option value="home_services_mobile">Servicios - Móvil</option>
+                        <option value="home_services_desktop">Servicios - Escritorio</option>
+                        <option value="contact_banner">Banner de Contacto</option>
+                        <option value="footer_promotion">Promoción Footer</option>
+                        <option value="header_announcement">Anuncio Header</option>
+                        <option value="sidebar_ad">Anuncio Lateral</option>
                     </SelectFormGroup>
-
+                    
                     <InputFormGroup
-                        eRef={secondsRef}
-                        label="Mostrar despues de (segundos)"
-                        type="number"
-                        disabled={selectedAction}
+                        eRef={nameRef}
+                        label="Título del anuncio"
+                        col="col-md-12"
+                        placeholder="Ej: Descubre nuestros servicios"
+                        required
                     />
-
-                    <InputFormGroup eRef={linkRef} label="Link" />
+                    
+                    <TextareaFormGroup
+                        eRef={descriptionRef}
+                        label="Descripción"
+                        col="col-md-12"
+                        rows={3}
+                        placeholder="Descripción del anuncio"
+                    />
+                    
+                    <TextareaFormGroup
+                        eRef={whatsappMessageRef}
+                        label="Mensaje personalizado de WhatsApp"
+                        col="col-md-12"
+                        rows={3}
+                        placeholder="Mensaje que se enviará al hacer clic en el anuncio (opcional)"
+                    />
                 </div>
             </Modal>
         </>

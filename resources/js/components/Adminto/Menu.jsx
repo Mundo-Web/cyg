@@ -305,13 +305,13 @@ const Menu = ({
                                     Subscripciones
                                 </MenuItem>
                                 
-                                {/*
+                                
                                 <MenuItem
                                     href="/admin/ads"
                                     icon="mdi mdi-google-ads"
                                 >
-                                    Pop-ups
-                                </MenuItem>*/}
+                                    Anuncios
+                                </MenuItem>
                                  <MenuItem
                                     href="/admin/brands"
                                     icon="mdi mdi-domain"

@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import TextWithHighlight from '../../../Utils/TextWithHighlight';
 import WhatsAppButton, { WhatsAppButtonWithArrow } from '../../Shared/WhatsAppButton';
+import DynamicAd from '../../Shared/DynamicAd';
 
 // Placeholder SVGs for icons (replace with your actual icons if available)
 // Using a generic icon for all cards for simplicity in this example.
@@ -158,32 +159,37 @@ const HomeSeccionServicios = ({ data, allServices }) => {
 
                 {/* MOBILE: Card de RR.HH debajo del swiper */}
                 <div className="block lg:hidden mb-8 px-[5%]">
-                    <div
-                        className={`relative font-paragraph rounded-lg shadow-xl overflow-hidden flex flex-col h-[350px] transition-all duration-300 z-10`}
-                    >
-                        {/* Overlay gradiente negro a transparente de abajo hacia arriba */}
-                        <div
-                            className="absolute inset-0 transition-opacity duration-300 pointer-events-none "
-                            style={{
-                                background: "linear-gradient(to top, rgba(0,0,0), #ffffff)"
-                            }}
-                        />
-                        <img
-                            src={"assets/cambiogerencia/card-contact.webp"}
-                            alt={"Servicios de RR.HH"}
-                            className="w-full h-full object-cover z-10 relative group-hover:opacity-0 transition-opacity duration-300"
-                            onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400/cccccc/808080?text=Imagen+no+disponible"; }}
-                        />
-                        <div className="p-6 flex flex-col flex-grow z-20 absolute bottom-0 text-white">
-                            <h3 className={`text-xl font-medium mb-2 `}>Servicios de RR.HH</h3>
-                            <p className={`text-xs mb-4 flex-grow text-white`}>Herramientas ágiles para la gestión del talent, enean commodo ligula eget dolor. </p>
-
-                            <WhatsAppButtonWithArrow variant="constrast" className="bg-constrast flex items-center gap-2 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-red-600 transition duration-300 ease-in-out text-sm sm:text-base">
-                                Reserva una consulta
-                            </WhatsAppButtonWithArrow>
-
-                        </div>
-                    </div>
+                    <DynamicAd
+                        correlative="home_services_mobile"
+                        className="h-[350px]"
+                        showWhatsAppButton={true}
+                        fallbackContent={
+                            // Contenido por defecto si no hay anuncio configurado
+                            <div
+                                className={`relative font-paragraph rounded-lg shadow-xl overflow-hidden flex flex-col h-[350px] transition-all duration-300 z-10`}
+                            >
+                                <div
+                                    className="absolute inset-0 transition-opacity duration-300 pointer-events-none "
+                                    style={{
+                                        background: "linear-gradient(to top, rgba(0,0,0), #ffffff)"
+                                    }}
+                                />
+                                <img
+                                    src={"assets/cambiogerencia/card-contact.webp"}
+                                    alt={"Servicios de RR.HH"}
+                                    className="w-full h-full object-cover z-10 relative group-hover:opacity-0 transition-opacity duration-300"
+                                    onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400/cccccc/808080?text=Imagen+no+disponible"; }}
+                                />
+                                <div className="p-6 flex flex-col flex-grow z-20 absolute bottom-0 text-white">
+                                    <h3 className={`text-xl font-medium mb-2 `}>Servicios de RR.HH</h3>
+                                    <p className={`text-xs mb-4 flex-grow text-white`}>Herramientas ágiles para la gestión del talent, enean commodo ligula eget dolor. </p>
+                                    <WhatsAppButtonWithArrow variant="constrast" className="bg-constrast flex items-center gap-2 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-red-600 transition duration-300 ease-in-out text-sm sm:text-base">
+                                        Reserva una consulta
+                                    </WhatsAppButtonWithArrow>
+                                </div>
+                            </div>
+                        }
+                    />
                 </div>
 
                 {/* DESKTOP: Grids como antes */}
@@ -197,30 +203,37 @@ const HomeSeccionServicios = ({ data, allServices }) => {
                             slug={service.slug}
                         />
                     ))}
-                    <div
-                        className={`relative h-[350px] font-paragraph rounded-lg shadow-xl overflow-hidden flex flex-col  transition-all duration-300 z-10`}
-                    >
-                        {/* Overlay gradiente negro a transparente de abajo hacia arriba */}
-                        <div
-                            className="absolute inset-0 transition-opacity duration-300 pointer-events-none "
-                            style={{
-                                background: "linear-gradient(to top, rgba(0,0,0), #ffffff)"
-                            }}
-                        />
-                        <img
-                            src={"assets/cambiogerencia/card-contact.webp"}
-                            alt={"Servicios de RR.HH"}
-                            className="w-full h-full object-cover z-10 relative group-hover:opacity-0 transition-opacity duration-300"
-                            onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400/cccccc/808080?text=Imagen+no+disponible"; }}
-                        />
-                        <div className="p-6 flex flex-col flex-grow z-20  absolute bottom-0 text-white">
-                            <h3 className={`text-xl font-medium mb-2 `}>Servicios de RR.HH</h3>
-                            <p className={`text-xs mb-4 flex-grow  text-white`}>Herramientas ágiles para la gestión del talent, enean commodo ligula eget dolor. </p>
-                            <WhatsAppButtonWithArrow variant="constrast" className="bg-constrast flex items-center gap-2 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-primary transition duration-300 ease-in-out text-sm sm:text-base">
-                                Reserva una consulta
-                            </WhatsAppButtonWithArrow>
-                        </div>
-                    </div>
+                    <DynamicAd
+                        correlative="home_services_desktop"
+                        className="h-[350px]"
+                        showWhatsAppButton={true}
+                        fallbackContent={
+                            // Contenido por defecto si no hay anuncio configurado
+                            <div
+                                className={`relative h-[350px] font-paragraph rounded-lg shadow-xl overflow-hidden flex flex-col  transition-all duration-300 z-10`}
+                            >
+                                <div
+                                    className="absolute inset-0 transition-opacity duration-300 pointer-events-none "
+                                    style={{
+                                        background: "linear-gradient(to top, rgba(0,0,0), #ffffff)"
+                                    }}
+                                />
+                                <img
+                                    src={"assets/cambiogerencia/card-contact.webp"}
+                                    alt={"Servicios de RR.HH"}
+                                    className="w-full h-full object-cover z-10 relative group-hover:opacity-0 transition-opacity duration-300"
+                                    onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/600x400/cccccc/808080?text=Imagen+no+disponible"; }}
+                                />
+                                <div className="p-6 flex flex-col flex-grow z-20  absolute bottom-0 text-white">
+                                    <h3 className={`text-xl font-medium mb-2 `}>Servicios de RR.HH</h3>
+                                    <p className={`text-xs mb-4 flex-grow  text-white`}>Herramientas ágiles para la gestión del talent, enean commodo ligula eget dolor. </p>
+                                    <WhatsAppButtonWithArrow variant="constrast" className="bg-constrast flex items-center gap-2 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-primary transition duration-300 ease-in-out text-sm sm:text-base">
+                                        Reserva una consulta
+                                    </WhatsAppButtonWithArrow>
+                                </div>
+                            </div>
+                        }
+                    />
                 </div>
 
                 <div className="hidden  px-[5%] mx-auto lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

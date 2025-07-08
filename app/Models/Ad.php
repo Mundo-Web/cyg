@@ -27,6 +27,8 @@ class Ad extends Model
         'visible',
         'invasivo',
         'status',
+        'correlative',
+        'whatsapp_message',
     ];
 
     public static function today()
@@ -62,6 +64,22 @@ class Ad extends Model
                     });
             })
             ->get();
+    }
+
+    public static function getByCorrelative($correlative)
+    {
+        return self::where('status', true)
+            ->where('visible', true)
+            ->where('correlative', $correlative)
+            ->where(function ($query) {
+                $query->whereNull('date_begin')
+                    ->whereNull('date_end')
+                    ->orWhere(function ($query) {
+                        $query->where('date_begin', '<=', Carbon::now())
+                            ->where('date_end', '>=', Carbon::now());
+                    });
+            })
+            ->first();
     }
 
     public function item()
