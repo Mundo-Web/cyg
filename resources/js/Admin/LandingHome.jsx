@@ -96,7 +96,7 @@ const LandingHome = ({
     const imageRef = useRef(null);
     const videoRef = useRef(null);
     const linkRef = useRef(null);
-    const is_videoRef = useRef(null);
+   // const is_videoRef = useRef(null);
  const [sourceLoading, setSourceLoading] = useState(null);  
     // Nombres de las páginas para los tabs
     const pageNames = {
@@ -202,7 +202,7 @@ const LandingHome = ({
                 if (subtitleRef.current) subtitleRef.current.value = "";
                 if (descriptionRef.current) descriptionRef.current.value = "";
                 if (linkRef.current) linkRef.current.value = "";
-                if (is_videoRef.current) is_videoRef.current.checked = false;
+                //if (is_videoRef.current) is_videoRef.current.checked = false;
                 if (imageRef.current) {
                     imageRef.current.value = "";
                     // Esperar un poco para que el componente esté montado
@@ -230,9 +230,9 @@ const LandingHome = ({
                     descriptionRef.current.value = data?.description ?? "";
                 if (linkRef.current) linkRef.current.value = data?.link ?? "";
 
-                if (is_videoRef.current) {
+               /* if (is_videoRef.current) {
                     is_videoRef.current.checked = isVideoChecked;
-                }
+                }*/
 
                 // Manejar carga de imagen/video
                 if (isVideoChecked && videoRef.current && data?.video) {
@@ -283,10 +283,10 @@ const LandingHome = ({
             if (linkRef.current?.value)
                 formData.append("link", linkRef.current.value);
 
-            formData.append(
+          /*  formData.append(
                 "is_video",
                 is_videoRef.current?.checked ? "1" : "0"
-            );
+            );*/
             formData.append("lang_id", default_lang_id);
 
             if (isVideo && videoRef.current) {
@@ -386,7 +386,7 @@ const LandingHome = ({
                 if (subtitleRef.current) subtitleRef.current.value = "";
                 if (descriptionRef.current) descriptionRef.current.value = "";
                 if (linkRef.current) linkRef.current.value = "";
-                if (is_videoRef.current) is_videoRef.current.checked = false;
+               // if (is_videoRef.current) is_videoRef.current.checked = false;
                 if (imageRef.current) {
                     imageRef.current.value = "";
                     // Limpiar la imagen mostrada después de un breve delay
@@ -938,12 +938,12 @@ const LandingHome = ({
                     </div>
 
                     <div className="col-md-6">
-                        <SwitchFormGroup
+                       {/* <SwitchFormGroup
                             eRef={is_videoRef}
                             onChange={(e) => setIsVideo(e.target.checked)}
                             label="Usar video en lugar de imagen"
                             specification="Solo se mostrará el video en la sección"
-                        />
+                        /> */}
 
                         {!isVideo ? (
                             <ImageFormGroup
