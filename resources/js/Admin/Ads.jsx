@@ -133,7 +133,7 @@ const Ads = () => {
                                     .refresh(),
                         },
                     });
-                   /* container.unshift({
+                    container.unshift({
                         widget: "dxButton",
                         location: "after",
                         options: {
@@ -142,7 +142,7 @@ const Ads = () => {
                             hint: "Nuevo anuncio",
                             onClick: () => onModalOpen(),
                         },
-                    });*/
+                    });
                 }}
                 columns={[
                     {
