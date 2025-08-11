@@ -48,6 +48,7 @@ const HomeSeccionBlog = ({ data, posts }) => {
             >
               {posts.map((post, idx) => (
                 <SwiperSlide key={idx}>
+                     <a href={`/blog/${post?.slug}`} className="block" key={idx}>
                   <article className="rounded-xl overflow-hidden flex flex-col bg-white">
                     <img
                       src={`/api/posts/media/${post?.image}`}
@@ -64,6 +65,7 @@ const HomeSeccionBlog = ({ data, posts }) => {
                       <a href={`/blog/${post?.slug}`} className="text-constrast font-semibold hover:underline text-base mt-auto">Leer +</a>
                     </div>
                   </article>
+                  </a>
                 </SwiperSlide>
               ))}
             </Swiper>
