@@ -152,7 +152,8 @@ const BlogHeader = ({ categories, postRecent, landing }) => {
                                 variants={itemVariants}
                                 whileHover="hover"
                             >
-                                <motion.div
+                                <motion.a
+                                  href={`/blog/${postRecent[1]?.slug}`}
                                     className="flex flex-col sm:flex-row gap-6"
                                     variants={cardHoverVariants}
                                 >
@@ -183,7 +184,7 @@ const BlogHeader = ({ categories, postRecent, landing }) => {
                                          
                                         </button>
                                     </div>
-                                </motion.div>
+                                </motion.a>
                             </motion.div>
                             )}
 
@@ -193,7 +194,8 @@ const BlogHeader = ({ categories, postRecent, landing }) => {
                                 variants={itemVariants}
                                 whileHover="hover"
                             >
-                                <motion.div
+                                <motion.a
+                                  href={`/blog/${postRecent[2]?.slug}`}
                                     className="flex flex-col sm:flex-row gap-6"
                                     variants={cardHoverVariants}
                                 >
@@ -224,7 +226,7 @@ const BlogHeader = ({ categories, postRecent, landing }) => {
                                          
                                         </button>
                                     </div>
-                                </motion.div>
+                                </motion.a>
                             </motion.div>)}
                             
                         </div>

@@ -61,7 +61,7 @@ const HomeSeccionBlog = ({ data, posts }) => {
                       <p className="text-neutral text-base mb-4 flex-1 line-clamp-2" >
                         { post?.summary }
                       </p>
-                      <a href={`/post/${post?.slug}`} className="text-constrast font-semibold hover:underline text-base mt-auto">Leer +</a>
+                      <a href={`/blog/${post?.slug}`} className="text-constrast font-semibold hover:underline text-base mt-auto">Leer +</a>
                     </div>
                   </article>
                 </SwiperSlide>
@@ -89,7 +89,8 @@ const HomeSeccionBlog = ({ data, posts }) => {
           {/* Grid desktop */}
           <div className="hidden md:grid mx-auto grid-cols-1 md:grid-cols-3 gap-8">
             {posts.map((post, idx) => (
-              <article key={idx} className="rounded-xl overflow-hidden flex flex-col bg-white">
+            <a href={`/blog/${post?.slug}`} className="block" key={idx}>
+                <article  className="rounded-xl overflow-hidden flex flex-col bg-white">
                 <img
                    src={`/api/posts/media/${post?.image}`}
                       
@@ -102,9 +103,10 @@ const HomeSeccionBlog = ({ data, posts }) => {
                   <p className="text-neutral text-base mb-4 flex-1 line-clamp-2" >
                     {  post?.summary }
                   </p>
-                  <a href={`/post/${post?.slug}`} className="text-constrast font-semibold hover:underline text-base mt-auto">Leer +</a>
+                  <a href={`/blog/${post?.slug}`} className="text-constrast font-semibold hover:underline text-base mt-auto">Leer +</a>
                 </div>
               </article>
+            </a>
             ))}
           </div>
         </>;
