@@ -72,6 +72,7 @@ const ServiceCard = ({
 
 const HomeSeccionServicios = ({ data, allServices }) => {
     // Dividir allServices en dos arrays para la versión desktop
+    console.log(allServices);
     const servicesRow1 = allServices ? allServices.slice(0, Math.ceil(allServices.length / 2) - 1) : [];
     const servicesRow2 = allServices ? allServices.slice(Math.ceil(allServices.length / 2) + 1) : [];
 

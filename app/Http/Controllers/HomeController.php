@@ -40,7 +40,7 @@ class HomeController extends BasicController
         $testimonios = Testimony::where('status', true)->where('lang_id', $langId)->get();
 $indicators = Indicator::where('status', true)->where('lang_id', $langId)->get();
 
-$allServices = Service::where('status', true)->where('lang_id', $langId)->get();
+$allServices = Service::where('status', true)->where('visible', true)->where('lang_id', $langId)->get();
         return [
             'landing' => $landing,
             'sliders' => $sliders,

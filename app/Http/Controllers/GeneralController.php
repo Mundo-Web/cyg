@@ -150,7 +150,7 @@ class GeneralController extends BasicController
         $response = new Response();
         try {
 
-            $data = Service::where('lang_id', app('current_lang_id'))->get();
+            $data = Service::where('lang_id', app('current_lang_id'))->where('status',true)->where('visible',true)->get();
 
             $response->data = $data; //, 'sedes' => $data3
             $response->status = 200;
