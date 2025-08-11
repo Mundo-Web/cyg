@@ -61,8 +61,8 @@ const ServiceCard = ({
             <div className={`p-3 rounded-full  w-12 h-12 flex items-center justify-center mb-4 z-10 relative bg-accent`}>
                 <GenericIcon />
             </div>
-            <h3 className={`text-[28px] font-medium mb-2  z-10 relative`}>{cardTitle}</h3>
-            <p className={` mb-4 flex-grow  z-10 relative`}>{description}</p>
+            <h3 className={`text-[28px] font-medium mb-2  z-10 relative line-clamp-3`}>{cardTitle}</h3>
+            <p className={` mb-4 flex-grow  z-10 relative line-clamp-4`}>{description}</p>
             <a  href={`/servicio/${slug}`} className={`mt-auto  font-semibold flex gap-2  z-10 relative`}>
                 <PlusIcon />  más información
             </a>
@@ -71,10 +71,10 @@ const ServiceCard = ({
 };
 
 const HomeSeccionServicios = ({ data, allServices }) => {
-    // Dividir allServices en dos arrays para la versión desktop
+    // Dividir allServices para mostrar 3 en la primera fila y el resto en la segunda
     console.log(allServices);
-    const servicesRow1 = allServices ? allServices.slice(0, Math.ceil(allServices.length / 2) - 1) : [];
-    const servicesRow2 = allServices ? allServices.slice(Math.ceil(allServices.length / 2) + 1) : [];
+    const servicesRow1 = allServices ? allServices.slice(0, 3) : [];
+    const servicesRow2 = allServices ? allServices.slice(3) : [];
 
     // Swiper state for mobile
     const [activeIndex, setActiveIndex] = useState(0);
