@@ -125,7 +125,7 @@ const Home = ({
 }) => {
     console.log("Home component loaded",allServices);
     const { t, loading, error } = useTranslation();
-    const tipoSlider = "nopain";
+    const tipoSlider = "home";
     const landingNosotros = landing?.find(
         (item) => item.correlative === "page_home_nosotros"
     );
