@@ -123,6 +123,7 @@ const Home = ({
     indicators= [],
     allServices= [],
 }) => {
+    console.log("Home component loaded",allServices);
     const { t, loading, error } = useTranslation();
     const tipoSlider = "nopain";
     const landingNosotros = landing?.find(
