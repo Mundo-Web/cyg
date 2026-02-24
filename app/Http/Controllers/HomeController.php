@@ -17,6 +17,7 @@ use App\Models\PurchaseOption;
 use App\Models\Slider;
 use App\Models\Staff;
 use App\Models\Strength;
+use App\Models\SuccessStory;
 use App\Models\Supply;
 use App\Models\Testimony;
 use Illuminate\Http\Request;
@@ -37,10 +38,11 @@ class HomeController extends BasicController
         $brands = Brand::where('status', true)->where('visible', true)->orderBy('created_at', 'DESC')->get();
         $strengths = Strength::where('status', true)->where('visible', true)->where('lang_id', $langId)->get();
         $posts = Post::where('status', true)->orderBy('created_at', 'desc')->with('category')->where('lang_id', $langId)->limit(3)->get();
-        $testimonios = Testimony::where('status', true)->where('lang_id', $langId)->get();
-        $indicators = Indicator::where('status', true)->where('lang_id', $langId)->get();
+        $testimonios = Testimony::where('status', true)->where('visible', true)->where('lang_id', $langId)->get();
+        $indicators = Indicator::where('status', true)->where('visible', true)->where('lang_id', $langId)->get();
 
         $allServices = Service::where('status', true)->where('visible', true)->where('lang_id', $langId)->get();
+        $casosExito = SuccessStory::where('status', true)->where('visible', true)->get();
         return [
             'landing' => $landing,
             'sliders' => $sliders,
@@ -50,6 +52,7 @@ class HomeController extends BasicController
             'testimonios' => $testimonios,
             'indicators' => $indicators,
             'allServices' => $allServices,
+            'casosExito' => $casosExito,
         ];
     }
 }

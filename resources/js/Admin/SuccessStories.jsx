@@ -12,7 +12,7 @@ import SelectAPIFormGroup from "../Components/Adminto/form/SelectAPIFormGroup";
 import DxButton from "../Components/dx/DxButton";
 import CreateReactScript from "../Utils/CreateReactScript";
 import ReactAppend from "../Utils/ReactAppend";
-
+import SwitchFormGroup from "@Adminto/form/SwitchFormGroup";
 import { LanguageProvider } from "../context/LanguageContext";
 import DragDropImage from "../components/Adminto/form/DragDropImage";
 import SetSelectValue from "../Utils/SetSelectValue";
@@ -40,7 +40,6 @@ const FeatureCard = ({
     addSolution,
     challenges,
     addChallenge,
-
 }) => {
     const handleFieldChange = (field, value) => {
         onUpdate(index, field, value);
@@ -54,8 +53,7 @@ const FeatureCard = ({
         <div className="card mb-3">
             <div className="card-body">
                 <div className="row">
-
-                    {(type === "solution" || type === "challenge") ? (
+                    {type === "solution" || type === "challenge" ? (
                         <div className="col-md-12">
                             <InputFormGroup
                                 label="Título"
@@ -64,18 +62,24 @@ const FeatureCard = ({
                                     handleFieldChange("title", e.target.value)
                                 }
                             />
-                        </div>) : (
+                        </div>
+                    ) : (
                         <>
                             <div className="col-md-9">
                                 <InputFormGroup
                                     label="Título"
                                     value={feature.title}
                                     onChange={(e) =>
-                                        handleFieldChange("title", e.target.value)
+                                        handleFieldChange(
+                                            "title",
+                                            e.target.value,
+                                        )
                                     }
                                 />
                                 <div className="mb-3">
-                                    <label className="form-label">Descripción</label>
+                                    <label className="form-label">
+                                        Descripción
+                                    </label>
                                     <textarea
                                         className="form-control"
                                         rows={4}
@@ -83,7 +87,7 @@ const FeatureCard = ({
                                         onChange={(e) =>
                                             handleFieldChange(
                                                 "description",
-                                                e.target.value
+                                                e.target.value,
                                             )
                                         }
                                     />
@@ -108,11 +112,14 @@ const FeatureCard = ({
                         onClick={() => onRemove(index)}
                         disabled={!canRemove}
                     >
-                        <i className="fa fa-trash"></i> 
+                        <i className="fa fa-trash"></i>
                     </button>
                     {(type === "characteristic" &&
                         index === characteristics.length - 1) ||
-                        (type === "benefit" && index === benefits.length - 1) || (type === "step" && index === steps.length - 1) || (type === "challenge" && index === challenges.length - 1) || (type === "solution" && index === solutions.length - 1) ? (
+                    (type === "benefit" && index === benefits.length - 1) ||
+                    (type === "step" && index === steps.length - 1) ||
+                    (type === "challenge" && index === challenges.length - 1) ||
+                    (type === "solution" && index === solutions.length - 1) ? (
                         <button
                             type="button"
                             className="btn btn-sm btn-outline-primary"
@@ -120,24 +127,24 @@ const FeatureCard = ({
                                 type === "characteristic"
                                     ? addCharacteristic
                                     : type === "benefit"
-                                        ? addBenefit
-                                        : type === "step"
-                                            ? addStep
-                                            : type === "challenge"
-                                                ? addChallenge
-                                                : addSolution
+                                      ? addBenefit
+                                      : type === "step"
+                                        ? addStep
+                                        : type === "challenge"
+                                          ? addChallenge
+                                          : addSolution
                             }
                         >
                             +{" "}
                             {type === "characteristic"
                                 ? "Característica"
                                 : type === "benefit"
-                                    ? "Beneficio"
-                                    : type === "step"
-                                        ? "Paso"
-                                        : type === "challenge"
-                                            ? "Desafío"
-                                            : "Solución"}
+                                  ? "Beneficio"
+                                  : type === "step"
+                                    ? "Paso"
+                                    : type === "challenge"
+                                      ? "Desafío"
+                                      : "Solución"}
                         </button>
                     ) : null}
                 </div>
@@ -146,7 +153,6 @@ const FeatureCard = ({
     );
 };
 const SuccessStories = ({ brands }) => {
-
     const gridRef = useRef();
     const modalRef = useRef();
 
@@ -162,9 +168,6 @@ const SuccessStories = ({ brands }) => {
     const title_challengesRef = useRef();
     const description_challengesRef = useRef();
 
-
-
-
     const category_projectRef = useRef();
     const client_projectRef = useRef();
     const date_start_projectRef = useRef();
@@ -178,22 +181,14 @@ const SuccessStories = ({ brands }) => {
     const company_description_percentageRef = useRef();
     const servicesRef = useRef();
 
-
     const imageRef = useRef();
     const image_challengesRef = useRef();
     const [isEditing, setIsEditing] = useState(false);
 
-
     // Estados para desafíos y soluciones
-    const [challenges, setChallenges] = useState([
-        { title: "" },
-    ]);
+    const [challenges, setChallenges] = useState([{ title: "" }]);
 
-    const [solutions, setSolutions] = useState([
-        { title: "" },
-    ]);
-
-
+    const [solutions, setSolutions] = useState([{ title: "" }]);
 
     const [benefits, setBenefits] = useState([
         { title: "", description: "", image: undefined },
@@ -202,7 +197,6 @@ const SuccessStories = ({ brands }) => {
     const [steps, setSteps] = useState([
         { title: "", description: "", image: undefined },
     ]);
-
 
     // Funciones para desafíos (simplificadas)
     const addChallenge = () => {
@@ -276,8 +270,6 @@ const SuccessStories = ({ brands }) => {
         setBenefits(benefits.filter((_, i) => i !== index));
     };
 
-
-
     const addStep = () => {
         setSteps([
             ...steps,
@@ -301,30 +293,23 @@ const SuccessStories = ({ brands }) => {
         setSteps(steps.filter((_, i) => i !== index));
     };
 
-
-
     const onModalOpen = async (data) => {
         if (data?.id) setIsEditing(true);
         else setIsEditing(false);
-
 
         idRef.current.value = data?.id ?? "";
         nameRef.current.value = data?.name ?? "";
         summaryRef.current.value = data?.summary ?? "";
 
-
         descriptionRef.current.value = data?.description ?? "";
 
-
-
-
         title_benefitsRef.current.value = data?.title_benefits ?? "";
-        description_benefitsRef.current.value = data?.description_benefits ?? "";
+        description_benefitsRef.current.value =
+            data?.description_benefits ?? "";
 
         title_challengesRef.current.value = data?.title_challenges ?? "";
-        description_challengesRef.current.value = data?.description_challenges ?? "";
-
-
+        description_challengesRef.current.value =
+            data?.description_challenges ?? "";
 
         category_projectRef.current.value = data?.category_project ?? "";
         client_projectRef.current.value = data?.client_project ?? "";
@@ -334,35 +319,45 @@ const SuccessStories = ({ brands }) => {
         company_nameRef.current.value = data?.company_name ?? "";
         company_summaryRef.current.value = data?.company_summary ?? "";
         company_percentageRef.current.value = data?.company_percentage ?? "";
-        company_description_percentageRef.current.value = data?.company_description_percentage ?? "";
+        company_description_percentageRef.current.value =
+            data?.company_description_percentage ?? "";
 
         // Manejar servicios - obtener datos completos por IDs
         if (data?.services && data.services.length > 0) {
             try {
                 let serviceIds = [];
-                
+
                 // Verificar si es un string separado por comas o un array
-                if (typeof data.services === 'string') {
+                if (typeof data.services === "string") {
                     // Si es string, dividir por comas y limpiar espacios
-                    serviceIds = data.services.split(',').map(id => id.trim()).filter(id => id);
+                    serviceIds = data.services
+                        .split(",")
+                        .map((id) => id.trim())
+                        .filter((id) => id);
                 } else if (Array.isArray(data.services)) {
                     // Si es array, extraer IDs si son objetos o usar directamente si son strings
-                    serviceIds = data.services.map(service => 
-                        typeof service === 'object' ? service.id : service
+                    serviceIds = data.services.map((service) =>
+                        typeof service === "object" ? service.id : service,
                     );
                 }
-                
-                console.log('Service IDs extraídos:', serviceIds);
-                
+
+                console.log("Service IDs extraídos:", serviceIds);
+
                 if (serviceIds.length > 0) {
-                    const servicesToSet = await successStoriesRest.getServicesByIds(serviceIds);
-                    console.log('Servicios cargados:', servicesToSet);
-                    SetSelectValue(servicesRef.current, servicesToSet, "id", "name");
+                    const servicesToSet =
+                        await successStoriesRest.getServicesByIds(serviceIds);
+                    console.log("Servicios cargados:", servicesToSet);
+                    SetSelectValue(
+                        servicesRef.current,
+                        servicesToSet,
+                        "id",
+                        "name",
+                    );
                 } else {
                     SetSelectValue(servicesRef.current, [], "id", "name");
                 }
             } catch (error) {
-                console.error('Error al cargar servicios:', error);
+                console.error("Error al cargar servicios:", error);
                 // Fallback: si hay error, limpiar el select
                 SetSelectValue(servicesRef.current, [], "id", "name");
             }
@@ -373,12 +368,12 @@ const SuccessStories = ({ brands }) => {
 
         // Manejo de imágenes como en el primer código
         imageRef.image.src = `/api/success_story/media/${data?.image ?? "undefined"}`;
-        company_logoRef.image.src = `/api/success_story/media/${data?.company_logo ?? "undefined"
-            }`;
-        image_challengesRef.image.src = `/api/success_story/media/${data?.image_challenges ?? "undefined"
-            }`;
-
-
+        company_logoRef.image.src = `/api/success_story/media/${
+            data?.company_logo ?? "undefined"
+        }`;
+        image_challengesRef.image.src = `/api/success_story/media/${
+            data?.image_challenges ?? "undefined"
+        }`;
 
         if (data?.benefits) {
             setBenefits(
@@ -386,7 +381,7 @@ const SuccessStories = ({ brands }) => {
                     title: char.title,
                     description: char.description,
                     image: char.image, // Guardar directamente el string del nombre de archivo
-                }))
+                })),
             );
         }
 
@@ -394,8 +389,7 @@ const SuccessStories = ({ brands }) => {
             setChallenges(
                 data.challenges.map((char) => ({
                     title: char.title,
-
-                }))
+                })),
             );
         }
 
@@ -403,14 +397,9 @@ const SuccessStories = ({ brands }) => {
             setSolutions(
                 data.solutions.map((char) => ({
                     title: char.title,
-
-                }))
+                })),
             );
         }
-
-
-
-
 
         $(modalRef.current).modal("show");
     };
@@ -435,7 +424,6 @@ const SuccessStories = ({ brands }) => {
             title_benefits: title_benefitsRef.current.value,
             description_benefits: description_benefitsRef.current.value,
 
-
             category_project: category_projectRef.current.value,
             client_project: client_projectRef.current.value,
             date_start_project: date_start_projectRef.current.value,
@@ -444,7 +432,8 @@ const SuccessStories = ({ brands }) => {
             company_name: company_nameRef.current.value,
             company_summary: company_summaryRef.current.value,
             company_percentage: company_percentageRef.current.value,
-            company_description_percentage: company_description_percentageRef.current.value,
+            company_description_percentage:
+                company_description_percentageRef.current.value,
             services: $(servicesRef.current).val(),
         };
 
@@ -460,8 +449,8 @@ const SuccessStories = ({ brands }) => {
         if (company_logo) formData.append("company_logo", company_logo);
 
         const image_challenges = image_challengesRef.current.files[0];
-        if (image_challenges) formData.append("image_challenges", image_challenges);
-
+        if (image_challenges)
+            formData.append("image_challenges", image_challenges);
 
         // Dentro de onModalSubmit, al procesar características
         /*  characteristics.forEach((char, index) => {
@@ -473,21 +462,21 @@ const SuccessStories = ({ brands }) => {
             formData.append(`benefits[${index}][title]`, char.title);
             formData.append(
                 `benefits[${index}][description]`,
-                char.description
+                char.description,
             );
 
             if (char.image) {
                 if (char.image.file) {
                     formData.append(
                         `benefits[${index}][image]`,
-                        char.image.file
+                        char.image.file,
                     );
                 }
                 // Si es una imagen existente (viene del servidor como string)
                 else if (typeof char.image === "string") {
                     formData.append(
                         `benefits[${index}][existing_image]`,
-                        char.image
+                        char.image,
                     );
                 }
             }
@@ -499,8 +488,6 @@ const SuccessStories = ({ brands }) => {
         solutions.forEach((char, index) => {
             formData.append(`solutions[${index}][title]`, char.title);
         });
-
-
 
         const result = await successStoriesRest.save(formData);
         if (!result) return;
@@ -517,17 +504,26 @@ const SuccessStories = ({ brands }) => {
 
     const onDeleteClicked = async (id) => {
         const { isConfirmed } = await Swal.fire({
-            title: 'Eliminar registro',
-            text: '¿Estás seguro de eliminar este caso de éxito?',
-            icon: 'warning',
+            title: "Eliminar registro",
+            text: "¿Estás seguro de eliminar este caso de éxito?",
+            icon: "warning",
             showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar",
         });
         if (!isConfirmed) return;
         const result = await successStoriesRest.delete(id);
         if (!result) return;
-        $(gridRef.current).dxDataGrid('instance').refresh();
+        $(gridRef.current).dxDataGrid("instance").refresh();
+    };
+    const onVisibleChange = async ({ id, value }) => {
+        const result = await successStoriesRest.boolean({
+            id,
+            field: "visible",
+            value,
+        });
+        if (!result) return;
+        $(gridRef.current).dxDataGrid("instance").refresh();
     };
 
     return (
@@ -582,8 +578,8 @@ const SuccessStories = ({ brands }) => {
                                         style={{ maxWidth: "300px" }}
                                     >
                                         {data.description}
-                                    </div>
-                                )
+                                    </div>,
+                                ),
                             );
                         },
                     },
@@ -603,10 +599,31 @@ const SuccessStories = ({ brands }) => {
                                         borderRadius: "4px",
                                     }}
                                     onError={(e) =>
-                                    (e.target.src =
-                                        "/images/default-thumbnail.jpg")
+                                        (e.target.src =
+                                            "/images/default-thumbnail.jpg")
                                     }
-                                />
+                                />,
+                            );
+                        },
+                    },
+                    {
+                        dataField: "visible",
+                        caption: "Visible",
+                        dataType: "boolean",
+                        width: "120px",
+                        cellTemplate: (container, { data }) => {
+                            $(container).empty();
+                            ReactAppend(
+                                container,
+                                <SwitchFormGroup
+                                    checked={data.visible == 1}
+                                    onChange={() =>
+                                        onVisibleChange({
+                                            id: data.id,
+                                            value: !data.visible,
+                                        })
+                                    }
+                                />,
                             );
                         },
                     },
@@ -622,7 +639,7 @@ const SuccessStories = ({ brands }) => {
                                     title: "Editar",
                                     icon: "fa fa-pen",
                                     onClick: () => onModalOpen(data),
-                                })
+                                }),
                             );
                             container.append(
                                 DxButton({
@@ -630,7 +647,7 @@ const SuccessStories = ({ brands }) => {
                                     title: "Eliminar",
                                     icon: "fa fa-trash",
                                     onClick: () => onDeleteClicked(data.id),
-                                })
+                                }),
                             );
                         },
                     },
@@ -639,7 +656,9 @@ const SuccessStories = ({ brands }) => {
 
             <Modal
                 modalRef={modalRef}
-                title={isEditing ? "Editar Caso de éxito" : "Nuevo Caso de éxito"}
+                title={
+                    isEditing ? "Editar Caso de éxito" : "Nuevo Caso de éxito"
+                }
                 onSubmit={onModalSubmit}
                 size="xl"
             >
@@ -651,7 +670,9 @@ const SuccessStories = ({ brands }) => {
                         {/* Información del proyecto */}
                         <div className="card mb-4">
                             <div className="card-header">
-                                <h6 className="mb-0">Información del Proyecto</h6>
+                                <h6 className="mb-0">
+                                    Información del Proyecto
+                                </h6>
                             </div>
                             <div className="card-body">
                                 <InputFormGroup
@@ -688,7 +709,9 @@ const SuccessStories = ({ brands }) => {
                         {/* Información de la empresa */}
                         <div className="card">
                             <div className="card-header">
-                                <h6 className="mb-0">Información de la Empresa</h6>
+                                <h6 className="mb-0">
+                                    Información de la Empresa
+                                </h6>
                             </div>
                             <div className="card-body">
                                 <ImageFormGroup
@@ -717,14 +740,14 @@ const SuccessStories = ({ brands }) => {
                                     label="Descripción del porcentaje de éxito"
                                     required
                                 />
-                                <SelectAPIFormGroup 
-                                    eRef={servicesRef} 
-                                    searchAPI='/api/admin/services/paginate' 
-                                    searchBy='name' 
-                                    label='Servicios incluidos' 
-                                    dropdownParent='#success-stories-container' 
+                                <SelectAPIFormGroup
+                                    eRef={servicesRef}
+                                    searchAPI="/api/admin/services/paginate"
+                                    searchBy="name"
+                                    label="Servicios incluidos"
+                                    dropdownParent="#success-stories-container"
                                     tags
-                                    multiple 
+                                    multiple
                                 />
                             </div>
                         </div>
@@ -754,7 +777,9 @@ const SuccessStories = ({ brands }) => {
                                     required
                                 />
                                 <div className="mb-3">
-                                    <label className="form-label">Descripción *</label>
+                                    <label className="form-label">
+                                        Descripción *
+                                    </label>
                                     <textarea
                                         ref={descriptionRef}
                                         className="form-control"
@@ -777,7 +802,9 @@ const SuccessStories = ({ brands }) => {
                                     required
                                 />
                                 <div className="mb-3">
-                                    <label className="form-label">Descripción de beneficios *</label>
+                                    <label className="form-label">
+                                        Descripción de beneficios *
+                                    </label>
                                     <textarea
                                         ref={description_benefitsRef}
                                         className="form-control"
@@ -785,7 +812,7 @@ const SuccessStories = ({ brands }) => {
                                         required
                                     />
                                 </div>
-                                
+
                                 <h6 className="mb-3">Lista de Beneficios</h6>
                                 {benefits.map((benefit, index) => (
                                     <FeatureCard
@@ -806,7 +833,9 @@ const SuccessStories = ({ brands }) => {
                         {/* Sección de desafíos y soluciones */}
                         <div className="card">
                             <div className="card-header bg-primary text-white">
-                                <h6 className="mb-0 text-white">Desafíos y Soluciones</h6>
+                                <h6 className="mb-0 text-white">
+                                    Desafíos y Soluciones
+                                </h6>
                             </div>
                             <div className="card-body">
                                 <div className="row">
@@ -817,7 +846,9 @@ const SuccessStories = ({ brands }) => {
                                             required
                                         />
                                         <div className="mb-4">
-                                            <label className="form-label">Descripción del desafío *</label>
+                                            <label className="form-label">
+                                                Descripción del desafío *
+                                            </label>
                                             <textarea
                                                 ref={description_challengesRef}
                                                 className="form-control"
@@ -825,39 +856,69 @@ const SuccessStories = ({ brands }) => {
                                                 required
                                             />
                                         </div>
-                                        
+
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <h6 className="mb-3">Desafíos</h6>
-                                                {challenges.map((char, index) => (
-                                                    <FeatureCard
-                                                        key={`challenge-${index}`}
-                                                        feature={char}
-                                                        index={index}
-                                                        onUpdate={updateChallenge}
-                                                        onRemove={removeChallenge}
-                                                        canRemove={challenges.length > 1}
-                                                        type="challenge"
-                                                        challenges={challenges}
-                                                        addChallenge={addChallenge}
-                                                    />
-                                                ))}
+                                                <h6 className="mb-3">
+                                                    Desafíos
+                                                </h6>
+                                                {challenges.map(
+                                                    (char, index) => (
+                                                        <FeatureCard
+                                                            key={`challenge-${index}`}
+                                                            feature={char}
+                                                            index={index}
+                                                            onUpdate={
+                                                                updateChallenge
+                                                            }
+                                                            onRemove={
+                                                                removeChallenge
+                                                            }
+                                                            canRemove={
+                                                                challenges.length >
+                                                                1
+                                                            }
+                                                            type="challenge"
+                                                            challenges={
+                                                                challenges
+                                                            }
+                                                            addChallenge={
+                                                                addChallenge
+                                                            }
+                                                        />
+                                                    ),
+                                                )}
                                             </div>
                                             <div className="col-md-6">
-                                                <h6 className="mb-3">Soluciones</h6>
-                                                {solutions.map((char, index) => (
-                                                    <FeatureCard
-                                                        key={`solution-${index}`}
-                                                        feature={char}
-                                                        index={index}
-                                                        onUpdate={updateSolution}
-                                                        onRemove={removeSolution}
-                                                        canRemove={solutions.length > 1}
-                                                        type="solution"
-                                                        solutions={solutions}
-                                                        addSolution={addSolution}
-                                                    />
-                                                ))}
+                                                <h6 className="mb-3">
+                                                    Soluciones
+                                                </h6>
+                                                {solutions.map(
+                                                    (char, index) => (
+                                                        <FeatureCard
+                                                            key={`solution-${index}`}
+                                                            feature={char}
+                                                            index={index}
+                                                            onUpdate={
+                                                                updateSolution
+                                                            }
+                                                            onRemove={
+                                                                removeSolution
+                                                            }
+                                                            canRemove={
+                                                                solutions.length >
+                                                                1
+                                                            }
+                                                            type="solution"
+                                                            solutions={
+                                                                solutions
+                                                            }
+                                                            addSolution={
+                                                                addSolution
+                                                            }
+                                                        />
+                                                    ),
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -884,6 +945,6 @@ CreateReactScript((el, properties) => {
             <BaseAdminto {...properties} title="Casos de éxito">
                 <SuccessStories {...properties} />
             </BaseAdminto>
-        </LanguageProvider>
+        </LanguageProvider>,
     );
 });
