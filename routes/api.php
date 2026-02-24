@@ -124,6 +124,7 @@ Route::get('/generals/get-aboutuses', [GeneralController::class, 'getAboutuses']
 Route::get('/generals/get-generals', [GeneralController::class, 'getGenerals']);
 Route::get('/generals/get-services', [GeneralController::class, 'getServices']);
 Route::get('/generals/get-modal', [GeneralController::class, 'getModal']);
+Route::get('/generals/get-casosexito', [GeneralController::class, 'getCasosExito']);
 
 Route::get('/items/get-destacados', [ItemController::class, 'getDestacados']);
 Route::get('/items/get-testimonies', [TestimonyController::class, 'getTestimonies']);
@@ -302,7 +303,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/appointments/{id}', [AdminAppointmentController::class, 'delete']);
 
 
-         Route::post('/success_stories', [AdminSuccessStoryController::class, 'save']);
+        Route::post('/success_stories', [AdminSuccessStoryController::class, 'save']);
         Route::post('/success_stories/paginate', [AdminSuccessStoryController::class, 'paginate']);
         Route::patch('/success_stories/status', [AdminSuccessStoryController::class, 'status']);
         Route::patch('/success_stories/{field}', [AdminSuccessStoryController::class, 'boolean']);

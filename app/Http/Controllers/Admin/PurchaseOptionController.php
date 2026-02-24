@@ -49,11 +49,8 @@ class PurchaseOptionController extends BasicController
         // Agregar imágenes nuevas
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $file) {
-                $uuid = Crypto::randomUUID();
-                $ext = $file->getClientOriginalExtension();
-                $path = "images/purchase_option/{$uuid}.{$ext}";
-                Storage::put($path, file_get_contents($file));
-                $gallery[] = "{$uuid}.{$ext}";
+                $fileName = $this->saveImageFile($file, "images/purchase_option");
+                $gallery[] = $fileName;
             }
         }
 
@@ -85,11 +82,7 @@ class PurchaseOptionController extends BasicController
                 // Procesar imagen si se subió
                 if ($request->hasFile("characteristics.{$index}.image")) {
                     $file = $request->file("characteristics.{$index}.image");
-                    $uuid = Crypto::randomUUID();
-                    $ext = $file->getClientOriginalExtension();
-                    $path = "images/purchase_option/{$uuid}.{$ext}";
-                    Storage::put($path, file_get_contents($file));
-                    $image = "{$uuid}.{$ext}";
+                    $image = $this->saveImageFile($file, "images/purchase_option");
                 } elseif (!empty($char['existing_image'])) {
                     // Mantener imagen existente
                     $image = $char['existing_image'];
@@ -122,11 +115,7 @@ class PurchaseOptionController extends BasicController
 
                 if ($request->hasFile("benefits.{$index}.image")) {
                     $file = $request->file("benefits.{$index}.image");
-                    $uuid = Crypto::randomUUID();
-                    $ext = $file->getClientOriginalExtension();
-                    $path = "images/purchase_option/{$uuid}.{$ext}";
-                    Storage::put($path, file_get_contents($file));
-                    $image = "{$uuid}.{$ext}";
+                    $image = $this->saveImageFile($file, "images/purchase_option");
                 } elseif (!empty($benefit['existing_image'])) {
                     $image = $benefit['existing_image'];
                 } else {
@@ -152,11 +141,7 @@ class PurchaseOptionController extends BasicController
             // Procesar imagen nueva
             if ($request->hasFile("requirements.{$index}.image")) {
                 $file = $request->file("requirements.{$index}.image");
-                $uuid = Crypto::randomUUID();
-                $ext = $file->getClientOriginalExtension();
-                $path = "images/purchase_option/{$uuid}.{$ext}";
-                Storage::put($path, file_get_contents($file));
-                $req['image'] = "{$uuid}.{$ext}";
+                $req['image'] = $this->saveImageFile($file, "images/purchase_option");
             }
             // Mantener imagen existente si ya está presente
             elseif (!empty($req['existing_image'])) {
@@ -173,7 +158,7 @@ class PurchaseOptionController extends BasicController
         return $body;
     }
 
-    public function afterSave(Request $request, $solution,?bool $isNew)
+    public function afterSave(Request $request, $solution, ?bool $isNew)
     {
         // Eliminar imágenes marcadas para borrar (si implementas esta función)
         return $solution;

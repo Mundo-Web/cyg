@@ -60,8 +60,11 @@ class CoverController extends Controller
             $thumbnailPath = 'cover/thumbnail/' . $userJpa->uuid . '.img';
             $fullPath = 'cover/' . $userJpa->uuid . '.img';
 
-            Storage::put($thumbnailPath, file_get_contents($thumbnail));
-            Storage::put($fullPath, file_get_contents($full));
+            $thumbImage = \Intervention\Image\Facades\Image::make($thumbnail);
+            $fullImage = \Intervention\Image\Facades\Image::make($full);
+
+            Storage::put($thumbnailPath, (string) $thumbImage->encode('webp', 80));
+            Storage::put($fullPath, (string) $fullImage->encode('webp', 80));
 
             $response->data = [
                 'uuid' => $userJpa->uuid

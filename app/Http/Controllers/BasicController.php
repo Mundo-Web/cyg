@@ -161,7 +161,7 @@ class BasicController extends Controller
   public function reactView(Request $request)
   {
     $properties = [];
-    
+
     // Only fetch user permissions if authenticated
     if (Auth::check()) {
       $user = Auth::user();
@@ -170,7 +170,7 @@ class BasicController extends Controller
     }
 
     // Use a database transaction to reuse the same connection for all queries
-    DB::connection()->transaction(function() use (&$properties) {
+    DB::connection()->transaction(function () use (&$properties) {
       // Execute all queries within the same connection to reduce the number of active connections
       $properties['messagesCount'] = Message::where('status', true)->where('seen', false)->count();
       $properties['citasCount'] = Appointment::where('status', true)->where('seen', false)->count();
@@ -180,15 +180,15 @@ class BasicController extends Controller
       $properties['randomImage'] = Service::where('status', true)->where('visible', true)->inRandomOrder()->first();
       $properties['socials'] = Social::where('status', true)->where('visible', true)->get();
     });
-    
+
     $properties['global'] = [
-        'PUBLIC_RSA_KEY' => Controller::$PUBLIC_RSA_KEY,
-        'APP_NAME' => env('APP_NAME', 'Trasciende'),
-        'APP_URL' => env('APP_URL'),
-        'APP_DOMAIN' => env('APP_DOMAIN'),
-        'APP_CORRELATIVE' => env('APP_CORRELATIVE'),
-        'APP_PROTOCOL' => env('APP_PROTOCOL', 'https'),
-        'GMAPS_API_KEY' => env('GMAPS_API_KEY')
+      'PUBLIC_RSA_KEY' => Controller::$PUBLIC_RSA_KEY,
+      'APP_NAME' => env('APP_NAME', 'Trasciende'),
+      'APP_URL' => env('APP_URL'),
+      'APP_DOMAIN' => env('APP_DOMAIN'),
+      'APP_CORRELATIVE' => env('APP_CORRELATIVE'),
+      'APP_PROTOCOL' => env('APP_PROTOCOL', 'https'),
+      'GMAPS_API_KEY' => env('GMAPS_API_KEY')
     ];
     $reactViewProperties = $this->setReactViewProperties($request);
     if (\is_array($reactViewProperties)) {
@@ -212,10 +212,10 @@ class BasicController extends Controller
       if (app()->bound('current_lang_id')) {
         $langId = app('current_lang_id');
       }
-      
+
       // Use a single database connection for all queries in this method
       DB::connection()->beginTransaction();
-      
+
       // [MODIFICADO] Aplicar with dinámicamente + filtro de idioma
       $instance = $this->setPaginationInstance($this->model)
         ->when($langId && Schema::hasColumn((new $this->model)->getTable(), 'lang_id'), function ($query) use ($langId) {
@@ -299,7 +299,7 @@ class BasicController extends Controller
       $response->data = $jpas;
       $response->summary = $this->setPaginationSummary($request, $instance);
       $response->totalCount = $totalCount;
-      
+
       // Commit the transaction on success
       if (DB::connection()->transactionLevel() > 0) {
         DB::connection()->commit();
@@ -307,7 +307,7 @@ class BasicController extends Controller
     } catch (\Throwable $th) {
       $response->status = 400;
       $response->message = $th->getMessage() . ' Ln.' . $th->getLine();
-      
+
       // Rollback on error
       if (DB::connection()->transactionLevel() > 0) {
         DB::connection()->rollBack();
@@ -325,13 +325,54 @@ class BasicController extends Controller
     return $request->all();
   }
 
+  protected function saveImageFile($file, $folder)
+  {
+    $uuid = Crypto::randomUUID();
+    $originalExt = strtolower($file->getClientOriginalExtension());
+    $fileSize = $file->getSize(); // Tamaño en bytes
+    $maxSizeBytes = 2 * 1024 * 1024; // 2 MB
+
+    // Si el archivo pesa 2MB o menos, lo guardamos directamente sin re-procesar (aplica para cualquier extensión)
+    if ($fileSize <= $maxSizeBytes) {
+      $finalPath = "{$folder}/{$uuid}.{$originalExt}";
+      Storage::put($finalPath, file_get_contents($file));
+      return "{$uuid}.{$originalExt}";
+    }
+
+    // Si pesa más de 2MB, intentamos redimensionar y convertir a WebP, soportando formatos conocidos
+    if (in_array($originalExt, ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'])) {
+      try {
+        $image = \Intervention\Image\Facades\Image::make($file);
+
+        if ($image->width() > 1920 || $image->height() > 1920) {
+          $image->resize(1920, 1920, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+          });
+        }
+
+        $encoded = (string) $image->encode('webp', 80);
+        $finalPath = "{$folder}/{$uuid}.webp";
+        Storage::put($finalPath, $encoded);
+        return "{$uuid}.webp";
+      } catch (\Exception $e) {
+        // fallback: si falla la conversión de un AVIF por ejemplo (por falta de soporte en la librería de servidor instalada), saltará al final y se guardará como venía.
+      }
+    }
+
+    // Cae aquí si no era formato soportado o si Intervention Image falló
+    $finalPath = "{$folder}/{$uuid}.{$originalExt}";
+    Storage::put($finalPath, file_get_contents($file));
+    return "{$uuid}.{$originalExt}";
+  }
+
   public function save(Request $request): HttpResponse|ResponseFactory
   {
     $response = new Response();
     try {
       // Start a transaction to ensure all database operations use the same connection
       DB::connection()->beginTransaction();
-      
+
       $body = $this->beforeSave($request);
 
       $snake_case = Text::camelToSnakeCase(str_replace('App\\Models\\', '', $this->model));
@@ -343,11 +384,9 @@ class BasicController extends Controller
       foreach ($this->imageFields as $field) {
         if (!$request->hasFile($field)) continue;
         $full = $request->file($field);
-        $uuid = Crypto::randomUUID();
-        $ext = $full->getClientOriginalExtension();
-        $path = "images/{$snake_case}/{$uuid}.{$ext}";
-        Storage::put($path, file_get_contents($full));
-        $body[$field] = "{$uuid}.{$ext}";
+
+        $fileName = $this->saveImageFile($full, "images/{$snake_case}");
+        $body[$field] = $fileName;
       }
 
       // Procesar videos
@@ -402,7 +441,7 @@ class BasicController extends Controller
 
       $response->status = 200;
       $response->message = 'Operacion correcta';
-      
+
       // Commit the transaction on success
       DB::connection()->commit();
     } catch (\Throwable $th) {
@@ -428,7 +467,7 @@ class BasicController extends Controller
     try {
       // Start a transaction to ensure all database operations use the same connection
       DB::connection()->beginTransaction();
-      
+
       $this->model::where('id', $request->id)
         ->update([
           'status' => $request->status ? 0 : 1
@@ -436,13 +475,13 @@ class BasicController extends Controller
 
       $response->status = 200;
       $response->message = 'Operacion correcta';
-      
+
       // Commit the transaction on success
       DB::connection()->commit();
     } catch (\Throwable $th) {
       $response->status = 400;
       $response->message = $th->getMessage();
-      
+
       // Rollback on error
       if (DB::connection()->transactionLevel() > 0) {
         DB::connection()->rollBack();
@@ -461,7 +500,7 @@ class BasicController extends Controller
     try {
       // Start a transaction to ensure all database operations use the same connection
       DB::connection()->beginTransaction();
-      
+
       $data = [];
       $data[$request->field] = $request->value;
 
@@ -470,13 +509,13 @@ class BasicController extends Controller
 
       $response->status = 200;
       $response->message = 'Operacion correcta';
-      
+
       // Commit the transaction on success
       DB::connection()->commit();
     } catch (\Throwable $th) {
       $response->status = 400;
       $response->message = $th->getMessage();
-      
+
       // Rollback on error
       if (DB::connection()->transactionLevel() > 0) {
         DB::connection()->rollBack();
@@ -495,7 +534,7 @@ class BasicController extends Controller
     try {
       // Start a transaction to ensure all database operations use the same connection
       DB::connection()->beginTransaction();
-      
+
       $deleted = $this->softDeletion
         ? $this->model::where('id', $id)
         ->update(['status' => false])
@@ -506,13 +545,13 @@ class BasicController extends Controller
 
       $response->status = 200;
       $response->message = 'Operacion correcta';
-      
+
       // Commit the transaction on success
       DB::connection()->commit();
     } catch (\Throwable $th) {
       $response->status = 400;
       $response->message = $th->getMessage();
-      
+
       // Rollback on error
       if (DB::connection()->transactionLevel() > 0) {
         DB::connection()->rollBack();

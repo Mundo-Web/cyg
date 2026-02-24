@@ -161,7 +161,7 @@ class PublicController extends Controller
     public function reactView(Request $request)
     {
         $properties = [];
-        
+
         // Only fetch user permissions if authenticated
         if (Auth::check()) {
             $user = Auth::user();
@@ -170,7 +170,7 @@ class PublicController extends Controller
         }
 
         // Use a database transaction to reuse the same connection for all queries
-        DB::connection()->transaction(function() use (&$properties) {
+        DB::connection()->transaction(function () use (&$properties) {
             // Execute all queries within the same connection
             $properties['messagesCount'] = Message::where('status', true)->where('seen', false)->count();
             $properties['citasCount'] = Appointment::where('status', true)->where('seen', false)->count();
@@ -178,15 +178,15 @@ class PublicController extends Controller
             $properties['linkWhatsApp'] = Social::where('description', '=', 'WhatsApp')->first();
             $properties['randomImage'] = Service::where('status', true)->where('visible', true)->inRandomOrder()->first();
         });
-        
+
         $properties['global'] = [
-                'PUBLIC_RSA_KEY' => Controller::$PUBLIC_RSA_KEY,
-                'APP_NAME' => env('APP_NAME', 'Trasciende'),
-                'APP_URL' => env('APP_URL'),
-                'APP_DOMAIN' => env('APP_DOMAIN'),
-                'APP_CORRELATIVE' => env('APP_CORRELATIVE'),
-                'APP_PROTOCOL' => env('APP_PROTOCOL', 'https'),
-                'GMAPS_API_KEY' => env('GMAPS_API_KEY')
+            'PUBLIC_RSA_KEY' => Controller::$PUBLIC_RSA_KEY,
+            'APP_NAME' => env('APP_NAME', 'Trasciende'),
+            'APP_URL' => env('APP_URL'),
+            'APP_DOMAIN' => env('APP_DOMAIN'),
+            'APP_CORRELATIVE' => env('APP_CORRELATIVE'),
+            'APP_PROTOCOL' => env('APP_PROTOCOL', 'https'),
+            'GMAPS_API_KEY' => env('GMAPS_API_KEY')
         ];
         $reactViewProperties = $this->setReactViewProperties($request);
         if (\is_array($reactViewProperties)) {
@@ -305,6 +305,46 @@ class PublicController extends Controller
         return $request->all();
     }
 
+    protected function saveImageFile($file, $folder)
+    {
+        $uuid = Crypto::randomUUID();
+        $originalExt = strtolower($file->getClientOriginalExtension());
+        $fileSize = $file->getSize(); // Tamaño en bytes
+        $maxSizeBytes = 500 * 1024; // 500 KB
+
+        // Si el archivo es liviano, lo guardamos directamente sin re-procesar (aplica para cualquier extensión)
+        if ($fileSize <= $maxSizeBytes) {
+            $finalPath = "{$folder}/{$uuid}.{$originalExt}";
+            Storage::put($finalPath, file_get_contents($file));
+            return "{$uuid}.{$originalExt}";
+        }
+
+        // Si pesa más de 500KB, intentamos redimensionar y convertir a WebP
+        if (in_array($originalExt, ['jpg', 'jpeg', 'png', 'webp'])) {
+            try {
+                $image = \Intervention\Image\Facades\Image::make($file);
+
+                if ($image->width() > 1920 || $image->height() > 1920) {
+                    $image->resize(1920, 1920, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+                }
+
+                $encoded = (string) $image->encode('webp', 80);
+                $finalPath = "{$folder}/{$uuid}.webp";
+                Storage::put($finalPath, $encoded);
+                return "{$uuid}.webp";
+            } catch (\Exception $e) {
+                // fallback
+            }
+        }
+
+        $finalPath = "{$folder}/{$uuid}.{$originalExt}";
+        Storage::put($finalPath, file_get_contents($file));
+        return "{$uuid}.{$originalExt}";
+    }
+
     public function save(Request $request): HttpResponse|ResponseFactory
     {
 
@@ -325,11 +365,9 @@ class PublicController extends Controller
 
                 if (!$request->hasFile($field)) continue;
                 $full = $request->file($field);
-                $uuid = Crypto::randomUUID();
-                $ext = $full->getClientOriginalExtension();
-                $path = "images/{$snake_case}/{$uuid}.{$ext}";
-                Storage::put($path, file_get_contents($full));
-                $body[$field] = "{$uuid}.{$ext}";
+
+                $fileName = $this->saveImageFile($full, "images/{$snake_case}");
+                $body[$field] = $fileName;
             }
 
             // Procesar videos (nuevo)

@@ -26,14 +26,14 @@ class DetailSuccessStoryController extends BasicController
         // Obtener los servicios relacionados si existen
         $relatedServices = [];
         if ($successStory && $successStory->services) {
-            $serviceIds = is_array($successStory->services) 
-                ? $successStory->services 
+            $serviceIds = is_array($successStory->services)
+                ? $successStory->services
                 : explode(',', $successStory->services);
-            
+
             $relatedServices = Service::whereIn('id', $serviceIds)
                 ->where('status', true)
                 ->where('visible', true)
-                ->select('id', 'name', 'title', 'description', 'slug','image_secondary')
+                ->select('id', 'name', 'title', 'description', 'slug', 'image_secondary')
                 ->get();
         }
 
@@ -41,15 +41,17 @@ class DetailSuccessStoryController extends BasicController
             ->orderBy('created_at', 'desc')
             ->take(3)
             ->get();
-     
+
+        $casosExito = SuccessStory::where('status', true)->where('visible', true)->get();
+        $allServices = Service::where('status', true)->where('visible', true)->where('lang_id', $langId)->get();
 
         return [
             'landing' => $landing,
             'successStory' => $successStory,
             'relatedServices' => $relatedServices,
             'successStoryRecents' => $successStoryRecents,
-         
-            //    'allServices' => $allServices,
+            'casosExito' => $casosExito,
+            'allServices' => $allServices,
         ];
     }
 }

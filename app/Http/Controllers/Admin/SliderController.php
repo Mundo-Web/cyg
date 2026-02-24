@@ -51,11 +51,8 @@ class SliderController extends BasicController
             foreach ($this->imageFields as $field) {
                 if (!$request->hasFile($field)) continue;
                 $full = $request->file($field);
-                $uuid = Crypto::randomUUID();
-                $ext = $full->getClientOriginalExtension();
-                $path = "images/{$snake_case}/{$uuid}.{$ext}";
-                Storage::put($path, file_get_contents($full));
-                $body[$field] = "{$uuid}.{$ext}";
+                $fileName = $this->saveImageFile($full, "images/{$snake_case}");
+                $body[$field] = $fileName;
             }
 
             // Manejo específico para el video

@@ -10,9 +10,11 @@ use App\Models\Indicator;
 use App\Models\InstagramPost;
 use App\Models\LandingHome;
 use App\Models\Lang;
+use App\Models\Service;
 use App\Models\Specialty;
 use App\Models\Staff;
 use App\Models\Strength;
+use App\Models\SuccessStory;
 use App\Models\Testimony;
 use Illuminate\Http\Request;
 
@@ -60,16 +62,19 @@ class AboutController extends BasicController
             ->where('lang_id', $langId)
             ->get();
 
-
+        $casosExito = SuccessStory::where('status', true)->where('visible', true)->get();
+        $allServices = Service::where('status', true)->where('visible', true)->where('lang_id', $langId)->get();
 
         return [
             'landing' => $landing,
             'strengths' => $strengths,
             'staff' => $staffData,
-           
+
             'brands' => $brands,
             'aboutus' => $aboutus,
             'core_values' => $core_values,
+            'casosExito' => $casosExito,
+            'allServices' => $allServices,
         ];
     }
 }

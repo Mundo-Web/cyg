@@ -149,6 +149,27 @@ class GeneralRest extends BasicRest {
             return [];
         }
     };
+
+    getCasosExito = async () => {
+        try {
+            const { status, result } = await Fetch(
+                `/api/${this.path}/get-casosexito`,
+                {
+                    method: "GET",
+                }
+            );
+
+            if (!status)
+                throw new Error(
+                    result?.message ?? "Ocurrió un error al consultar"
+                );
+
+            return result?.data ?? [];
+        } catch (error) {
+            console.error("Error en getCasosExito:", error);
+            return [];
+        }
+    };
 }
 
 export default GeneralRest;

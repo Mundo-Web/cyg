@@ -27,11 +27,8 @@ class FacilityController extends BasicController
         // Agregar imágenes nuevas
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $file) {
-                $uuid = Crypto::randomUUID();
-                $ext = $file->getClientOriginalExtension();
-                $path = "images/facility/{$uuid}.{$ext}";
-                Storage::put($path, file_get_contents($file));
-                $gallery[] = "{$uuid}.{$ext}";
+                $fileName = $this->saveImageFile($file, "images/facility");
+                $gallery[] = $fileName;
             }
         }
 
@@ -72,7 +69,7 @@ class FacilityController extends BasicController
         return $body;
     }
 
-    public function afterSave(Request $request, $service,?bool $isNew)
+    public function afterSave(Request $request, $service, ?bool $isNew)
     {
         // Eliminar imágenes marcadas para borrar (si implementas esta función)
         return $service;

@@ -30,7 +30,7 @@ class ServiceController extends BasicController
         // Procesar galería de imágenes
         $gallery = [];
         // En ServiceController.php
-      /*  if ($request->has('category_name')) {
+        /*  if ($request->has('category_name')) {
             $langId = app('current_lang_id'); // Obtener el lang_id del middleware
 
             $category = CategoryService::firstOrCreate(
@@ -51,11 +51,8 @@ class ServiceController extends BasicController
         // Agregar imágenes nuevas
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $file) {
-                $uuid = Crypto::randomUUID();
-                $ext = $file->getClientOriginalExtension();
-                $path = "images/service/{$uuid}.{$ext}";
-                Storage::put($path, file_get_contents($file));
-                $gallery[] = "{$uuid}.{$ext}";
+                $fileName = $this->saveImageFile($file, "images/service");
+                $gallery[] = $fileName;
             }
         }
 
@@ -81,7 +78,7 @@ class ServiceController extends BasicController
 
             foreach ($characteristics as $index => $char) {
                 $title = trim($char['title'] ?? '');
-              /*  $description = trim($char['description'] ?? '');
+                /*  $description = trim($char['description'] ?? '');
                 $image = null;
 
                 // Procesar imagen si se subió
@@ -109,15 +106,15 @@ class ServiceController extends BasicController
                     ];
                 }*/
 
-                 if ($title) {
+                if ($title) {
                     $processedCharacteristics[] = [
                         'title' => $title
-                      
+
                     ];
                 }
             }
         }
-       // $body['characteristics'] = $processedCharacteristics;
+        // $body['characteristics'] = $processedCharacteristics;
         $body['characteristics_approach'] = $processedCharacteristics;
 
         // Procesar beneficios (similar a características)
@@ -132,11 +129,7 @@ class ServiceController extends BasicController
 
                 if ($request->hasFile("benefits.{$index}.image")) {
                     $file = $request->file("benefits.{$index}.image");
-                    $uuid = Crypto::randomUUID();
-                    $ext = $file->getClientOriginalExtension();
-                    $path = "images/service/{$uuid}.{$ext}";
-                    Storage::put($path, file_get_contents($file));
-                    $image = "{$uuid}.{$ext}";
+                    $image = $this->saveImageFile($file, "images/service");
                 } elseif (!empty($benefit['existing_image'])) {
                     $image = $benefit['existing_image'];
                 } else {
@@ -167,11 +160,7 @@ class ServiceController extends BasicController
 
                 if ($request->hasFile("steps.{$index}.image")) {
                     $file = $request->file("steps.{$index}.image");
-                    $uuid = Crypto::randomUUID();
-                    $ext = $file->getClientOriginalExtension();
-                    $path = "images/service/{$uuid}.{$ext}";
-                    Storage::put($path, file_get_contents($file));
-                    $image = "{$uuid}.{$ext}";
+                    $image = $this->saveImageFile($file, "images/service");
                 } elseif (!empty($step['existing_image'])) {
                     $image = $step['existing_image'];
                 } else {
@@ -193,11 +182,11 @@ class ServiceController extends BasicController
         return $body;
     }
 
-    public function afterSave(Request $request, $service,?bool $isNew)
+    public function afterSave(Request $request, $service, ?bool $isNew)
     {
-       
 
-      
+
+
         // Eliminar imágenes marcadas para borrar (si implementas esta función)
         return $service;
     }

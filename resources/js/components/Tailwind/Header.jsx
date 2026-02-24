@@ -86,9 +86,7 @@ const Header = ({
     backgroundHeight = "h-full",
     backgroundPosition = "object-top",
     children,
-    lenghtServices,
     lenghtPosts,
-    lenghtCasos,
 }) => {
     const { t, loading, error } = useTranslation();
     /*  if (loading) {
@@ -181,6 +179,8 @@ const Header = ({
     const [generals, setGenerals] = useState([]);
     const [servicesData, setServicesData] = useState([]);
     const [modalData, setModalData] = useState([]);
+    const [lenghtCasos, setLenghtCasos] = useState(0);
+    const [lenghtServices, setLenghtServices] = useState(0);
 
     useEffect(() => {
         const fetchSocials = async () => {
@@ -189,6 +189,7 @@ const Header = ({
                 const dataGenerals = await generalRest.getGenerals();
                 const dataServices = await generalRest.getServices();
                 const dataModal = await generalRest.getModal();
+                const dataCasos = await generalRest.getCasosExito();
 
                 //const languages = await generalRest.getLanguages();
                 setSocials(data);
@@ -196,6 +197,8 @@ const Header = ({
 
                 setServicesData(dataServices);
                 setModalData(dataModal);
+                setLenghtCasos(dataCasos.length);
+                setLenghtServices(dataServices.length);
                 //  setLanguagesSystem(languages);
             } catch (error) {
                 console.error("Error fetching socials:", error);

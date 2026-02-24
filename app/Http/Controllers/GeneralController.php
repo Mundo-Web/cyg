@@ -150,7 +150,7 @@ class GeneralController extends BasicController
         $response = new Response();
         try {
 
-            $data = Service::where('lang_id', app('current_lang_id'))->where('status',true)->where('visible',true)->get();
+            $data = Service::where('lang_id', app('current_lang_id'))->where('status', true)->where('visible', true)->get();
 
             $response->data = $data; //, 'sedes' => $data3
             $response->status = 200;
@@ -180,6 +180,26 @@ class GeneralController extends BasicController
             $response->message = 'Operacion correcta';
         } catch (\Throwable $th) {
 
+            $response->status = 400;
+            $response->message = $th->getMessage();
+        } finally {
+            return response(
+                $response->toArray(),
+                $response->status
+            );
+        }
+    }
+
+    public function getCasosExito(Request $request): HttpResponse|ResponseFactory
+    {
+        $response = new Response();
+        try {
+            $data = \App\Models\SuccessStory::where('status', true)->where('visible', true)->get();
+
+            $response->data = $data;
+            $response->status = 200;
+            $response->message = 'Operacion correcta';
+        } catch (\Throwable $th) {
             $response->status = 400;
             $response->message = $th->getMessage();
         } finally {

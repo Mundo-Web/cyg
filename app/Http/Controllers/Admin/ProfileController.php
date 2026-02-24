@@ -67,8 +67,11 @@ class ProfileController extends BasicController
             $thumbnailPath = 'profile/thumbnail/' . $userJpa->relative_id . '.img';
             $fullPath = 'profile/' . $userJpa->relative_id . '.img';
 
-            Storage::put($thumbnailPath, file_get_contents($thumbnail));
-            Storage::put($fullPath, file_get_contents($full));
+            $thumbImage = \Intervention\Image\Facades\Image::make($thumbnail);
+            $fullImage = \Intervention\Image\Facades\Image::make($full);
+
+            Storage::put($thumbnailPath, (string) $thumbImage->encode('webp', 80));
+            Storage::put($fullPath, (string) $fullImage->encode('webp', 80));
 
             $response->status = 200;
             $response->message = 'Operacion correcta';

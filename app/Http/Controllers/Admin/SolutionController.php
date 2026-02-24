@@ -16,7 +16,7 @@ class SolutionController extends BasicController
 {
     public $model = Solution::class;
     public $reactView = 'Admin/Solutions';
-    public $imageFields = ['image', 'image_secondary', 'image_banner','image_icon'];
+    public $imageFields = ['image', 'image_secondary', 'image_banner', 'image_icon'];
 
     public function setPaginationInstance(string $model)
     {
@@ -50,11 +50,8 @@ class SolutionController extends BasicController
         // Agregar imágenes nuevas
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $file) {
-                $uuid = Crypto::randomUUID();
-                $ext = $file->getClientOriginalExtension();
-                $path = "images/solution/{$uuid}.{$ext}";
-                Storage::put($path, file_get_contents($file));
-                $gallery[] = "{$uuid}.{$ext}";
+                $fileName = $this->saveImageFile($file, "images/solution");
+                $gallery[] = $fileName;
             }
         }
 
@@ -86,11 +83,7 @@ class SolutionController extends BasicController
                 // Procesar imagen si se subió
                 if ($request->hasFile("characteristics.{$index}.image")) {
                     $file = $request->file("characteristics.{$index}.image");
-                    $uuid = Crypto::randomUUID();
-                    $ext = $file->getClientOriginalExtension();
-                    $path = "images/solution/{$uuid}.{$ext}";
-                    Storage::put($path, file_get_contents($file));
-                    $image = "{$uuid}.{$ext}";
+                    $image = $this->saveImageFile($file, "images/solution");
                 } elseif (!empty($char['existing_image'])) {
                     // Mantener imagen existente
                     $image = $char['existing_image'];
@@ -123,11 +116,7 @@ class SolutionController extends BasicController
 
                 if ($request->hasFile("benefits.{$index}.image")) {
                     $file = $request->file("benefits.{$index}.image");
-                    $uuid = Crypto::randomUUID();
-                    $ext = $file->getClientOriginalExtension();
-                    $path = "images/solution/{$uuid}.{$ext}";
-                    Storage::put($path, file_get_contents($file));
-                    $image = "{$uuid}.{$ext}";
+                    $image = $this->saveImageFile($file, "images/solution");
                 } elseif (!empty($benefit['existing_image'])) {
                     $image = $benefit['existing_image'];
                 } else {
@@ -149,7 +138,7 @@ class SolutionController extends BasicController
         return $body;
     }
 
-    public function afterSave(Request $request, $solution,?bool $isNew)
+    public function afterSave(Request $request, $solution, ?bool $isNew)
     {
         // Eliminar imágenes marcadas para borrar (si implementas esta función)
         return $solution;

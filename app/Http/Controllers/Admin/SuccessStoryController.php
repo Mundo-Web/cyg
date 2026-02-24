@@ -19,7 +19,7 @@ class SuccessStoryController extends BasicController
     public $reactView = 'Admin/SuccessStories';
     public $imageFields = ['image', 'image_challenges', 'company_logo'];
 
-    
+
 
     public function beforeSave(Request $request)
     {
@@ -28,7 +28,7 @@ class SuccessStoryController extends BasicController
         // Procesar galería de imágenes
         $gallery = [];
         // En ServiceController.php
-      /*  if ($request->has('category_name')) {
+        /*  if ($request->has('category_name')) {
             $langId = app('current_lang_id'); // Obtener el lang_id del middleware
 
             $category = CategoryService::firstOrCreate(
@@ -49,11 +49,8 @@ class SuccessStoryController extends BasicController
         // Agregar imágenes nuevas
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $file) {
-                $uuid = Crypto::randomUUID();
-                $ext = $file->getClientOriginalExtension();
-                $path = "images/service/{$uuid}.{$ext}";
-                Storage::put($path, file_get_contents($file));
-                $gallery[] = "{$uuid}.{$ext}";
+                $fileName = $this->saveImageFile($file, "images/service");
+                $gallery[] = $fileName;
             }
         }
 
@@ -65,7 +62,7 @@ class SuccessStoryController extends BasicController
 
         $body['gallery'] = $gallery;
 
-       
+
         // Procesar características compuestas
         $processedSolutions = [];
         if ($request->has('solutions')) {
@@ -73,21 +70,21 @@ class SuccessStoryController extends BasicController
 
             foreach ($solutions as $index => $sol) {
                 $title = trim($sol['title'] ?? '');
-             
 
-                 if ($title) {
+
+                if ($title) {
                     $processedSolutions[] = [
                         'title' => $title
-                      
+
                     ];
                 }
             }
         }
-       // $body['characteristics'] = $processedCharacteristics;
+        // $body['characteristics'] = $processedCharacteristics;
         $body['solutions'] = $processedSolutions;
 
         // Procesar desafíos (similar a características)
-           $processedChallenges = [];
+        $processedChallenges = [];
         if ($request->has('challenges')) {
             $challenges = $request->challenges;
 
@@ -97,7 +94,7 @@ class SuccessStoryController extends BasicController
                 if ($title) {
                     $processedChallenges[] = [
                         'title' => $title
-                      
+
                     ];
                 }
             }
@@ -116,11 +113,7 @@ class SuccessStoryController extends BasicController
 
                 if ($request->hasFile("benefits.{$index}.image")) {
                     $file = $request->file("benefits.{$index}.image");
-                    $uuid = Crypto::randomUUID();
-                    $ext = $file->getClientOriginalExtension();
-                    $path = "images/success_story/{$uuid}.{$ext}";
-                    Storage::put($path, file_get_contents($file));
-                    $image = "{$uuid}.{$ext}";
+                    $image = $this->saveImageFile($file, "images/success_story");
                 } elseif (!empty($benefit['existing_image'])) {
                     $image = $benefit['existing_image'];
                 } else {
@@ -140,12 +133,12 @@ class SuccessStoryController extends BasicController
         $body['benefits'] = $processedBenefits;
 
 
-      
+
 
         return $body;
     }
 
-    public function afterSave(Request $request, $service,?bool $isNew)
+    public function afterSave(Request $request, $service, ?bool $isNew)
     {
         // Eliminar imágenes marcadas para borrar (si implementas esta función)
         return $service;

@@ -11,8 +11,8 @@ import TextWithHighlight from "./Utils/TextWithHighlight";
 import ModalAppointment from "./components/Appointment/ModalAppointment";
 import DynamicGalleryServiceService from "./DynamicGalleryService";
 import { useTranslation } from "./hooks/useTranslation";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 import ServiceSeccionHero from "./components/Tailwind/CambioGerencia/ServiceSeccionHero";
 import ServiceSeccionEnfoque from "./components/Tailwind/CambioGerencia/ServiceSeccionEnfoque";
 import ServiceSeccionBeneficio from "./components/Tailwind/CambioGerencia/ServiceSeccionBeneficio";
@@ -21,8 +21,16 @@ import ServiceSeccionFaq from "./components/Tailwind/CambioGerencia/ServiceSecci
 import HomeSeccionTestimonios from "./components/Tailwind/CambioGerencia/HomeSeccionTestimonios";
 import CarruselBrands from "./components/Tailwind/Carrusel/CarruselBrands";
 
-const DetailService = ({ landing, services, allServices, linkWhatsApp, randomImage, brands,testimonios }) => {
-    
+const DetailService = ({
+    landing,
+    services,
+    allServices,
+    linkWhatsApp,
+    randomImage,
+    brands,
+    testimonios,
+    casosExito,
+}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
     const [showServicesMenu, setShowServicesMenu] = useState(false);
@@ -87,18 +95,28 @@ const DetailService = ({ landing, services, allServices, linkWhatsApp, randomIma
         },
     };
 
-
-
     return (
         <div className="font-poppins">
-            <Header />
+            <Header
+                lenghtServices={allServices?.length}
+                lenghtCasos={casosExito?.length}
+            />
             <ServiceSeccionHero service={services} />
             <ServiceSeccionEnfoque service={services} />
             <ServiceSeccionBeneficio service={services} />
             <ServiceSeccionMetodologia service={services} />
             <ServiceSeccionFaq faqs={services?.faqs} />
-            <HomeSeccionTestimonios data={landing} bg_color="bg-neutral-light" testimonios={testimonios} />
-            <CarruselBrands items={brands} data={{ title: "15,000+ empresas, desde pequeñas startups hasta nombres conocidos..." }} />
+            <HomeSeccionTestimonios
+                data={landing}
+                bg_color="bg-neutral-light"
+                testimonios={testimonios}
+            />
+            <CarruselBrands
+                items={brands}
+                data={{
+                    title: "15,000+ empresas, desde pequeñas startups hasta nombres conocidos...",
+                }}
+            />
             <Footer />
         </div>
     );
@@ -110,6 +128,6 @@ CreateReactScript((el, properties) => {
             <Base {...properties}>
                 <DetailService {...properties} />
             </Base>
-        </CarritoProvider>
+        </CarritoProvider>,
     );
 });
