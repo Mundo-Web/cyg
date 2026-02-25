@@ -69,7 +69,7 @@ const AboutUs = ({
             <CarruselBrands
                 items={brands}
                 data={{
-                    title: "15,000+ empresas, desde pequeñas startups hasta nombres conocidos...",
+                    title: "+100 empresas y entidades públicas, confía en nosotros...",
                 }}
             />
 
