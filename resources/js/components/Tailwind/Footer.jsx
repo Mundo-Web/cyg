@@ -1,23 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import ReactModal from "react-modal";
 import { motion, AnimatePresence } from "framer-motion";
 
 import Tippy from "@tippyjs/react";
 import HtmlContent from "../../Utils/HtmlContent";
 import GeneralRest from "../../actions/GeneralRest";
-import { Send, X } from "lucide-react";
+import { Send } from "lucide-react";
 import { useTranslation } from "../../hooks/useTranslation";
 import Swal from "sweetalert2";
 import SubscriptionsRest from "../../Actions/SubscriptionsRest";
 import Global from "../../Utils/Global";
 
-ReactModal.setAppElement("#app");
+
 
 const Footer = ({ terms, footerLinks = [] }) => {
     const { t } = useTranslation();
-    const [modalOpen, setModalOpen] = useState(false);
-    const openModal = (index) => setModalOpen(index);
-    const closeModal = () => setModalOpen(false);
     const generalRest = new GeneralRest();
     
     // Configurar notificaciones para GeneralRest (principalmente para consistencia)
@@ -256,13 +252,13 @@ const Footer = ({ terms, footerLinks = [] }) => {
                             <h3 className="text-base  font-title font-bold mb-3">
                                 Políticas
                             </h3>
-                            <a onClick={() => openModal(0)} className="cursor-pointer">
+                            <a href="/politicas-de-privacidad" className="cursor-pointer hover:text-accent transition-colors duration-200">
                                 Políticas de privacidad
                             </a>
-                            <a onClick={() => openModal(1)} className="cursor-pointer">
+                            <a href="/terminos-y-condiciones" className="cursor-pointer hover:text-accent transition-colors duration-200">
                                 Términos y Condiciones
                             </a>
-                            <a onClick={() => openModal(2)} className="cursor-pointer">
+                            <a href="/politicas-de-cambio" className="cursor-pointer hover:text-accent transition-colors duration-200">
                                 Políticas de cambio
                             </a>
                             <a href="/libro-de-reclamaciones" className="cursor-pointer">
@@ -411,32 +407,6 @@ const Footer = ({ terms, footerLinks = [] }) => {
                         </div>*/}
                     </div>
                 </div>
-                {/* Modal para Términos y Condiciones */}
-                {Object.keys(policyItems).map((key, index) => {
-                    const title = policyItems[key];
-                    const content =
-                        generalsData.find((x) => x.correlative == key)
-                            ?.description ?? "";
-                    return (
-                        <ReactModal
-                            key={index}
-                            isOpen={modalOpen === index}
-                            onRequestClose={closeModal}
-                            contentLabel={title}
-                            className="fixed top-[5%] left-1/2 -translate-x-1/2 bg-white p-6 rounded-3xl shadow-lg w-[95%] max-w-4xl max-h-[90vh] mb-10 overflow-y-auto scrollbar-hide"
-                            overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-auto  scrollbar-hide "
-                        >
-                            <button
-                                onClick={closeModal}
-                                className="float-right  text-red-500 hover:text-red-700 transition-all duration-300 "
-                            >
-                                <X width="2rem" strokeWidth="4px" />
-                            </button>
-                            <h2 className="text-2xl font-bold mb-4">{title}</h2>
-                            <HtmlContent className="prose" html={content} />
-                        </ReactModal>
-                    );
-                })}
             </footer>
         </>
     );
