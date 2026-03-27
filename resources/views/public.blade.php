@@ -1,5 +1,5 @@
 @php
-    $component = Route::currentRouteName();
+$component = Route::currentRouteName();
 @endphp
 
 
@@ -14,13 +14,13 @@
     <title>{{ env('APP_NAME', 'NoPain') }}</title>
 
     @isset($seoTitle)
-        <meta name="title" content="{{ $seoTitle }}" />
+    <meta name="title" content="{{ $seoTitle }}" />
     @endisset
     @isset($seoDescription)
-        <meta name="description" content="{{ $seoDescription }}" />
+    <meta name="description" content="{{ $seoDescription }}" />
     @endisset
     @isset($seoKeywords)
-        <meta name="keywords" content="{{ $seoKeywords }}" />
+    <meta name="keywords" content="{{ $seoKeywords }}" />
     @endisset
     <meta name="csrf_token" content="{{ csrf_token() }}">
     <link rel="manifest" href="/manifest.webmanifest">
@@ -42,8 +42,8 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 
-   <!--CAMBIO GERENCIA-->
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!--CAMBIO GERENCIA-->
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <!-- Añadido para traducir -->
     <script>
         function loadGoogleTranslate() {
@@ -64,12 +64,12 @@
     </style>
 
     @if ($component == 'Checkout.jsx')
-        <script type="application/javascript" src="https://checkout.culqi.com/js/v4"></script>
+    <script type="application/javascript" src="https://checkout.culqi.com/js/v4"></script>
     @elseif ($component == 'MyAccount.jsx')
-        <link href="/lte/assets/libs/dxdatagrid/css/dx.light.compact.css?v=06d3ebc8-645c-4d80-a600-c9652743c425"
-            rel="stylesheet" type="text/css" id="dg-default-stylesheet" />
-        <link href="/lte/assets/libs/dxdatagrid/css/dx.dark.compact.css?v=06d3ebc8-645c-4d80-a600-c9652743c425"
-            rel="stylesheet" type="text/css" id="dg-dark-stylesheet" disabled="disabled" />
+    <link href="/lte/assets/libs/dxdatagrid/css/dx.light.compact.css?v=06d3ebc8-645c-4d80-a600-c9652743c425"
+        rel="stylesheet" type="text/css" id="dg-default-stylesheet" />
+    <link href="/lte/assets/libs/dxdatagrid/css/dx.dark.compact.css?v=06d3ebc8-645c-4d80-a600-c9652743c425"
+        rel="stylesheet" type="text/css" id="dg-dark-stylesheet" disabled="disabled" />
     @endif
 
     @vite(['resources/css/app.css', 'resources/js/' . Route::currentRouteName()])
@@ -112,12 +112,12 @@
             s.parentNode.insertBefore(t, s)
         }(window, document, 'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '1098274404490481');
+        // fbq('init', '1098274404490481');
         fbq('track', 'PageView');
     </script>
     <noscript>
-        <img height="1" width="1" style="display:none"
-            src="https://www.facebook.com/tr?id=1098274404490481&ev=PageView&noscript=1" />
+        <!--img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=1098274404490481&ev=PageView&noscript=1" /-->
     </noscript>
     <!-- End Meta Pixel Code -->
     <link rel="stylesheet" href="/assets/fonts/aspekta/font-face.css" />
@@ -146,9 +146,9 @@
     <script src="/lte/assets/libs/quill/quill.min.js"></script>
 
     @if ($component == 'MyAccount.jsx')
-        <script src="/lte/assets/libs/dxdatagrid/js/dx.all.js"></script>
-        <script src="/lte/assets/libs/dxdatagrid/js/localization/dx.messages.es.js"></script>
-        <script src="/lte/assets/libs/dxdatagrid/js/localization/dx.messages.en.js"></script>
+    <script src="/lte/assets/libs/dxdatagrid/js/dx.all.js"></script>
+    <script src="/lte/assets/libs/dxdatagrid/js/localization/dx.messages.es.js"></script>
+    <script src="/lte/assets/libs/dxdatagrid/js/localization/dx.messages.en.js"></script>
     @endif
 
     <script src="/lte/assets/libs/tippy.js/tippy.all.min.js"></script>
